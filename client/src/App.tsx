@@ -1,11 +1,29 @@
-import React from 'react';
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import ErrorPage from "./pages/ErrorPage";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import HomeLayout from "./pages/HomeLayout";
 
-function App() {
+const router = createBrowserRouter([
+  {
+    path: "/sign-in",
+    Component: SignIn,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/sign-up",
+    Component: SignUp,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/",
+    Component: HomeLayout,
+    errorElement: <ErrorPage />,
+  },
+]);
+
+export default function App() {
   return (
-    <div className="App">
-      helloworld
-    </div>
+    <RouterProvider router={router} fallbackElement={<p>Initial Load...</p>} />
   );
 }
-
-export default App;

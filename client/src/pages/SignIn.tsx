@@ -9,31 +9,23 @@ import {
   TextField,
   Typography,
   Link,
+  Divider,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import { FormEvent, useEffect, useState } from "react";
-import { FirebaseErrorMessages, StylesConstant } from "../utils/constants";
-import { signInAPI } from "../firebase/api";
+import { StylesConstant } from "../utils/constants";
+import { signInAPI, signInWithGoogleAPI } from "../firebase/api";
 import { firebaseAuth } from "../firebase/firebase";
 import { userIsAuthentic } from "../redux/auth";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
-import toast from "react-hot-toast";
-
-interface UserInfoLogin {
-  email: string;
-  password: string;
-  first?: string;
-  last?: string;
-  phoneNumbe?: string;
-}
+import { FcGoogle } from "react-icons/fc";
+import { UserInfoLogin } from "../utils/interface";
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loaderWaitAndRemove = () => setTimeout(() => setIsLoading(false), 1000);
 
   useEffect(() => {
     // checks current state of auth locally
@@ -43,7 +35,7 @@ export default function SignIn() {
         navigate("/");
       }
       // just to persist loading effect for sometime
-      loaderWaitAndRemove();
+      setTimeout(() => setIsLoading(false), 500);
     });
   }, []);
 
@@ -58,26 +50,16 @@ export default function SignIn() {
       email: data.get("email") as string,
       password: data.get("password") as string,
     };
-    //calling api
-    // await signInAPI(userInfo.email, userInfo.password)
-    //   .then(() => {
-    //     toast.success("Successfully Logged In");
-    //   })
-    //   .catch((error) => {
-    //     toast.error(`ERROR : ${error?.code}`);
-    //   })
-    //   .finally(() => {
-    //     loaderWaitAndRemove();
-    //   });
+    await signInAPI(userInfo.email, userInfo.password).finally(() => {
+      setIsLoading(false);
+    });
+  };
 
-    //works same as above
-    toast.promise(signInAPI(userInfo.email, userInfo.password), {
-      loading: "Loading",
-      success: (data) => `Successfully Logged In`,
-      error: (err) =>
-        `ERROR: ${
-          FirebaseErrorMessages(err?.code).quickMessage
-        }`,
+  const handleGoogleBtn = async () => {
+    setIsLoading(true);
+    // Sign In using Google OAuth
+    await signInWithGoogleAPI().finally(() => {
+      setIsLoading(false);
     });
   };
 
@@ -101,12 +83,19 @@ export default function SignIn() {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={handleGoogleBtn}
+          sx={{ mt: 3, mb: 2, py: 1.0, backgroundColor: "#0e171d" }}
+        >
+          <FcGoogle style={{ height: 30, width: 30, marginRight: "8px" }} />
+          Google
+        </Button>
+        <Divider flexItem>OR</Divider>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -131,9 +120,10 @@ export default function SignIn() {
             sx={StylesConstant.changeAutofillColor}
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={
+              <Checkbox value="remember" color="primary" defaultChecked />
+            }
             label="Remember me"
-            onClick={(e) => console.log(e)}
           />
           <Button
             type="submit"
@@ -150,7 +140,11 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/sign-up" component={ReactRouterLink}>
+              <Link
+                to="/sign-up"
+                id="sign-in-button"
+                component={ReactRouterLink}
+              >
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

@@ -1,7 +1,6 @@
 import {
   Grid,
   Checkbox,
-  Avatar,
   Button,
   TextField,
   FormControlLabel,
@@ -9,19 +8,20 @@ import {
   Box,
   Typography,
   Container,
+  Divider,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 import { FormEvent, useEffect, useState } from "react";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { firebaseAuth } from "../firebase/firebase";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
-import { signUpAPI } from "../firebase/api";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { signInWithGoogleAPI, signUpAPI } from "../firebase/api";
+import { useDispatch } from "react-redux";
 import { userIsAuthentic } from "../redux/auth";
 import Loading from "./Loading";
 import { StylesConstant } from "../utils/constants";
+import { FcGoogle } from "react-icons/fc";
+import { UserInfoLogin } from "../utils/interface";
 
 export default function SignUp() {
   const [numberValue, setNumberValue] = useState<string>("");
@@ -42,41 +42,39 @@ export default function SignUp() {
         navigate("/");
       }
       // just to persist loading effect for sometime
-      setTimeout(() => setIsLoading(false), 1000);
+      setTimeout(() => setIsLoading(false), 500);
     });
   });
 
-  interface UserInfoLogin {
-    email: string;
-    password: string;
-    first?: string;
-    last?: string;
-    phoneNumber?: string;
-  }
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    // prevent default effect of submit allover webpage
     event.preventDefault();
     setIsLoading(true);
+    // get all input fields data with FormData function
     const data = new FormData(event.currentTarget);
     const userInfo: UserInfoLogin = {
       email: data.get("email") as string,
       password: data.get("password") as string,
       first: data.get("firstName") as string,
       last: data.get("lastName") as string,
-      phoneNumber: data.get("phoneNumber") as string,
+      phoneNumber: numberValue,
     };
     await signUpAPI(
       userInfo.first!.concat(userInfo.last!),
       userInfo.email,
-      userInfo.password
-    )
-      .then(() => {})
-      .catch((error) => {
-        console.error(error?.code);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      userInfo.password,
+      userInfo.phoneNumber!
+    ).finally(() => {
+      setIsLoading(false);
+    });
+  };
+
+  const handleGoogleBtn = async () => {
+    setIsLoading(true);
+    // Sign In using Google OAuth
+    await signInWithGoogleAPI().finally(() => {
+      setIsLoading(false);
+    });
   };
 
   const handleOTP = (newValue: string) => {
@@ -88,6 +86,7 @@ export default function SignUp() {
     setNumberValue(value);
   };
 
+  //loading window for sometime meanwhile check auth
   return isLoading ? (
     <Loading message="Just loading to Say Hello !!" />
   ) : (
@@ -107,12 +106,22 @@ export default function SignUp() {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
-        </Avatar>
+        </Avatar> */}
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={handleGoogleBtn}
+          sx={{ mt: 3, mb: 2, py: 1.0, backgroundColor: "#0e171d" }}
+        >
+          <FcGoogle style={{ height: 30, width: 30, marginRight: "8px" }} />
+          Google
+        </Button>
+        <Divider flexItem>OR</Divider>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -164,6 +173,7 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <MuiTelInput
+                required
                 defaultCountry="IN"
                 id="phoneNumber"
                 name="phoneNumber"
@@ -185,7 +195,13 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12} mt={3}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                control={
+                  <Checkbox
+                    value="allowExtraEmails"
+                    color="primary"
+                    defaultChecked
+                  />
+                }
                 label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>

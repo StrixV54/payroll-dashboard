@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { ReactNode, createContext, useMemo, useState } from "react";
 
-const ColorModeContext = createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 const getDesignTokens = (mode: PaletteMode) => ({
   palette: { mode },
@@ -14,6 +14,8 @@ const getDesignTokens = (mode: PaletteMode) => ({
 
 export default function ThemeMode({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<PaletteMode>("dark");
+
+  //Save reassigning of object when child components rerenders
   const colorMode = useMemo(
     () => ({
       // The dark mode switch would invoke this method

@@ -15,18 +15,3 @@ export const StylesConstant = {
   },
 };
 
-export const FirebaseErrorMessages = (code: string) => {
-  switch (code) {
-    case "auth/email-already-exists":
-      return {
-        quickMessage: "Email Already Exists",
-        detailedMessage:
-          "The provided email is already in use by an existing user",
-      };
-    default:
-      return {
-        quickMessage: "Firebase Login Issue",
-        detailedMessage: "Something went wrong. Please try again.",
-      };
-  }
-};

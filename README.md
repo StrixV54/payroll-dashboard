@@ -1,7 +1,7 @@
 # ZUCO : Payroll Management
 This project aims to provide a typical payroll management.
 - Provides Login to different level of users : User, Admin and Super Admin.
-- Build with fine tech stack: ReactJs, TypeScript, SASS, Firebase, NodeJs and MongoDB.
+- Build with fine tech stack: ReactJs, TypeScript, Material-UI, SASS, Firebase, NodeJs and MongoDB.
 
 ## Getting Started with CRA
 

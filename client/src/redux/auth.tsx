@@ -3,16 +3,12 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface AuthState {
   isAuthenticated: boolean;
-  user: string | null;
-  isSuperAdmin: boolean;
-  isAdmin: boolean;
+  user: object | null;
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
-  isSuperAdmin: false,
-  isAdmin: false,
 };
 
 export const authSlice = createSlice({
@@ -20,25 +16,17 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     // setting user as authentic for whole app
-    userIsAuthentic: (state: AuthState, action: PayloadAction<string>) => {
+    userIsAuthentic: (state: AuthState, action: PayloadAction<object>) => {
       state.isAuthenticated = true;
       state.user = action.payload;
     },
-    // updating role as admin
-    setAdminRole: (state: AuthState) => {
-      state.isAdmin = true;
-    },
-    // updating role as super admin
-    setSuperAdminRole: (state: AuthState) => {
-      state.isSuperAdmin = true;
-    },
     // resetting everything back to initialState
-    resetAuth: (state) => {
+    resetAuth: (state: AuthState) => {
       state = { ...initialState };
     },
   },
 });
 
-export const { userIsAuthentic, setAdminRole, setSuperAdminRole, resetAuth } = authSlice.actions;
+export const { userIsAuthentic, resetAuth } = authSlice.actions;
 
 export default authSlice.reducer;

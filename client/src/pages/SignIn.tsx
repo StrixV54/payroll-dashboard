@@ -30,10 +30,7 @@ export default function SignIn() {
   useEffect(() => {
     // checks current state of auth locally
     firebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
-        dispatch(userIsAuthentic(user.uid));
-        navigate("/");
-      }
+      if (user) navigate("/");
       // just to persist loading effect for sometime
       setTimeout(() => setIsLoading(false), 500);
     });

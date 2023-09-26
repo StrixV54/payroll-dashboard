@@ -9,9 +9,8 @@ export const StylesConstant = {
     width: "100vw",
   },
   changeAutofillColor: {
-    "input:-webkit-autofill": {
-      WebkitBoxShadow: "0 0 0 100px #333 inset",
+    "& input:-webkit-autofill ": {
+      WebkitBoxShadow: "0 0 0 100px #222222 inset",
     },
   },
 };
-

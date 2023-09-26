@@ -6,7 +6,10 @@ import {
 } from "firebase/auth";
 import { firebaseAuth, firebaseGoogleAuth, firestoreDB } from "./firebase";
 import {
+  DocumentData,
+  QueryDocumentSnapshot,
   QueryFieldFilterConstraint,
+  SnapshotOptions,
   collection,
   doc,
   getDoc,
@@ -76,10 +79,12 @@ export const queryUserAPI = async (queryFilter: QueryFieldFilterConstraint) => {
   // passing a single where query to  the query function
   const q = query(userRef, queryFilter);
   const querySnapshot = await getDocs(q);
-  return querySnapshot.forEach((doc) => {
+  let result: SnapshotOptions[] = [];
+  querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
+    result.push(doc.data());
   });
+  return result;
 };
 
 export const signInWithGoogleAPI = async () => {
@@ -94,7 +99,7 @@ export const signInWithGoogleAPI = async () => {
 
       /**
        * Check if not a new User, update last login date else create new user record
-       * */ 
+       * */
       if (
         new Date(user.metadata?.lastSignInTime as string).getTime() -
           new Date(user.metadata?.creationTime as string).getTime() >

@@ -29,6 +29,7 @@ export default function SignUp() {
   const [isErrorState, setisErrorState] = useState<boolean>(false);
   const [toBeVerifiedOTP, setToBeVerifiedOTP] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  console.log("Phone", numberValue);
 
   // const authState = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
@@ -37,14 +38,11 @@ export default function SignUp() {
   useEffect(() => {
     // checks current state of auth locally
     firebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
-        dispatch(userIsAuthentic(user.uid));
-        navigate("/");
-      }
+      if (user) navigate("/");
       // just to persist loading effect for sometime
       setTimeout(() => setIsLoading(false), 500);
     });
-  });
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     // prevent default effect of submit allover webpage
@@ -183,8 +181,14 @@ export default function SignUp() {
                 autoComplete="tel"
                 fullWidth
                 forceCallingCode
+                disableFormatting
                 onChange={handleMobile}
-                sx={StylesConstant.changeAutofillColor}
+                sx={{
+                  ...StylesConstant.changeAutofillColor,
+                  "input[name=phoneNumber]": {
+                    paddingLeft: 1,
+                  },
+                }}
               />
               <Typography variant="body2" marginTop={1} color="text.secondary">
                 Kindly note, OTP will be sent to verify the given phone number.

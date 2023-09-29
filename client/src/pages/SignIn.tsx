@@ -15,8 +15,6 @@ import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import { FormEvent, useEffect, useState } from "react";
 import { StylesConstant } from "../utils/constants";
 import { signInAPI, signInWithGoogleAPI } from "../firebase/api";
-import { firebaseAuth } from "../firebase/firebase";
-import { userIsAuthentic } from "../redux/auth";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
 import { FcGoogle } from "react-icons/fc";
@@ -29,14 +27,15 @@ export default function SignIn() {
 
   useEffect(() => {
     // checks current state of auth locally
-    firebaseAuth.onAuthStateChanged((user) => {
-      if (user) navigate("/");
-      // just to persist loading effect for sometime
-      setTimeout(() => setIsLoading(false), 500);
-    });
+    // firebaseAuth.onAuthStateChanged((user) => {
+    //   if (user) navigate("/");
+    //   // just to persist loading effect for sometime
+    //   setTimeout(() => setIsLoading(false), 500);
+    // });
+    setTimeout(() => setIsLoading(false), 500);
   }, []);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     // prevent default effect of submit allover webpage
     event.preventDefault();
     // setIsLoading(true);
@@ -47,15 +46,17 @@ export default function SignIn() {
       email: data.get("email") as string,
       password: data.get("password") as string,
     };
-    await signInAPI(userInfo.email, userInfo.password).finally(() => {
-      setIsLoading(false);
-    });
+    signInAPI(userInfo.email, userInfo.password)
+      .then(() => navigate("/dashboard"))
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
-  const handleGoogleBtn = async () => {
+  const handleGoogleBtn = () => {
     setIsLoading(true);
     // Sign In using Google OAuth
-    await signInWithGoogleAPI().finally(() => {
+    signInWithGoogleAPI().finally(() => {
       setIsLoading(false);
     });
   };
@@ -69,7 +70,7 @@ export default function SignIn() {
       maxWidth="xs"
       sx={{
         ...StylesConstant.divCenterStyle,
-        ...StylesConstant.fullScreen,
+        ...StylesConstant.fullScreenVWPort,
         flexDirection: "column",
       }}
     >
@@ -138,7 +139,7 @@ export default function SignIn() {
             </Grid>
             <Grid item>
               <Link
-                to="/sign-up"
+                to="/signup"
                 id="sign-in-button"
                 component={ReactRouterLink}
               >

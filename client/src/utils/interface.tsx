@@ -10,3 +10,13 @@ export interface UserInfoLogin {
   last?: string;
   phoneNumber?: string;
 }
+
+export interface UserInterface {
+  lastLoginAt: string;
+  displayName: string;
+  role: string;
+  uid: string;
+  email: string;
+}
+
+export type RoleLevel = "user" | "admin" | "super";

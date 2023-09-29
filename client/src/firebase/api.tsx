@@ -1,13 +1,10 @@
 import {
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { firebaseAuth, firebaseGoogleAuth, firestoreDB } from "./firebase";
+import { firebaseAuth, firebaseGoogleAuth, firestoreDB } from "./config";
 import {
-  DocumentData,
-  QueryDocumentSnapshot,
   QueryFieldFilterConstraint,
   SnapshotOptions,
   collection,
@@ -20,45 +17,47 @@ import {
 } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { printFirebaseError } from "../utils/helper";
+import { CleanHands } from "@mui/icons-material";
 
 const collectionName = "users";
 
-export const signUpAPI = async (
+export const signUpAPI = (
   fullName: string,
   email: string,
-  password: string,
-  phoneNumber: string
+  password: string
+  // phoneNumber: string
 ) => {
   return createUserWithEmailAndPassword(firebaseAuth, email, password)
     .then(async (res) => {
+      console.log("res", res);
+      // phoneNumber,
       /**
        * creates a new document with user's uid adding following information passed next.
        * */
-      return await setDoc(doc(firestoreDB, collectionName, res.user.uid), {
+      await setDoc(doc(firestoreDB, collectionName, res.user.uid), {
         displayName: fullName,
         email: res.user?.email,
         uid: res.user?.uid,
-        phoneNumber,
-        isAdmin: false,
-        isSuperAdmin: false,
+        role: "user", // ["user", "admin", "super"]
         lastLoginAt: new Date().toLocaleString(),
       });
+      return fullName;
     })
-    .then(() => {
-      toast.success("Successfully Created Account");
+    .then((name) => {
+      toast.success("Successfully Created Account" + name);
     })
     .catch((error) => {
+      console.log(error);
       printFirebaseError(error);
     });
 };
 
-export const signInAPI = async (email: string, password: string) => {
+export const signInAPI = (email: string, password: string) => {
   /**
    * SignIn function of Firebase , we update last login time and get the doc info
    * */
   return signInWithEmailAndPassword(firebaseAuth, email, password)
     .then(async (res) => {
-      console.log(res);
       await updateDoc(doc(firestoreDB, collectionName, res.user.uid), {
         lastLoginAt: new Date().toLocaleString(),
       });
@@ -70,6 +69,18 @@ export const signInAPI = async (email: string, password: string) => {
     .catch((error) => {
       printFirebaseError(error);
     });
+};
+
+// get specific user detail using uid
+export const getUserDetailAPI = async (uid: string) => {
+  const docSnap = await getDoc(doc(firestoreDB, collectionName, uid));
+  // If Document Snapshot exist then return data
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    console.log("No such document exists!");
+  }
+  return undefined;
 };
 
 export const queryUserAPI = async (queryFilter: QueryFieldFilterConstraint) => {
@@ -87,8 +98,8 @@ export const queryUserAPI = async (queryFilter: QueryFieldFilterConstraint) => {
   return result;
 };
 
-export const signInWithGoogleAPI = async () => {
-  return await signInWithPopup(firebaseAuth, firebaseGoogleAuth)
+export const signInWithGoogleAPI = () => {
+  return signInWithPopup(firebaseAuth, firebaseGoogleAuth)
     .then(async (res) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       // const credential = GoogleAuthProvider.credentialFromResult(res);
@@ -113,8 +124,7 @@ export const signInWithGoogleAPI = async () => {
         displayName: user.displayName,
         email: res.user.email,
         uid: res.user.uid,
-        isAdmin: false,
-        isSuperAdmin: false,
+        role: "user", // ["user", "admin", "super"]
         lastLoginAt: new Date().toLocaleString(),
       });
     })

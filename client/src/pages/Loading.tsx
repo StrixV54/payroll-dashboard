@@ -8,7 +8,7 @@ export default function Loading({ message }: { message?: string }) {
       maxWidth={false}
       sx={{
         ...StylesConstant.divCenterStyle,
-        ...StylesConstant.fullScreen,
+        ...StylesConstant.fullScreenVWPort,
         flexDirection: "column",
       }}
     >

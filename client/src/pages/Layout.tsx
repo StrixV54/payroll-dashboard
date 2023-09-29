@@ -16,7 +16,6 @@ export default function HomeLayout() {
 
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
-      console.log("Layout", user);
       if (!user) {
         navigate("/signin");
         return;

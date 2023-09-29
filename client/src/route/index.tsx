@@ -10,7 +10,6 @@ import NoMatch from "../pages/NoMatch";
 import SignOut from "../pages/SignOut";
 
 export default function RouteProvider({ role }: { role: RoleLevel }) {
-  console.log("Role", role);
   switch (role) {
     case "user":
       return (

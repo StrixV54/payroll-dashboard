@@ -17,7 +17,7 @@ export default function App() {
   const role = useSelector(
     (state: RootState) => state.auth.user?.role as RoleLevel
   );
-  console.log("Role", role);
+  // console.log("Role", role);
   // Update the theme only if the mode changes
   const theme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
 

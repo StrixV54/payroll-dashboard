@@ -7,19 +7,18 @@ import Loading from "./Loading";
 import { RootState } from "../redux/store";
 
 export default function SignOut() {
-  const isUserAuthentic = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
+  const isUserAuthentic = useSelector((state: RootState) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     //checks current state of auth locally
-    if (isUserAuthentic) {
-      dispatch(resetAuth());
-      firebaseAuth.signOut();
-    }
-    navigate("/");
+     if (isUserAuthentic) {
+        dispatch(resetAuth());
+        firebaseAuth.signOut();
+      }
+      navigate("/");
   }, []);
 
   return <Loading message="Logging Out !!" />;

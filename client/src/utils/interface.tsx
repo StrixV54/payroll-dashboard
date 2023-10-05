@@ -9,7 +9,30 @@ export interface UserInfoLogin {
   first?: string;
   last?: string;
   phoneNumber?: string;
+  dateofbirth?: string;
+  employeeid?: string;
 }
+
+export interface UserInfoPersonal {
+  currentaddress: string;
+  maritialstatus: string;
+  workskills: string;
+}
+export interface UserInfoJob {
+  salary: string;
+  aadhar: string;
+  pancard: string;
+  pfaaccount: string;
+  datejoined: string;
+  manager: string;
+}
+
+// export interface UserSalaryAdmin {
+//   basic: string;
+//   hra: string;
+//   pancard: string;
+//   pfaaccout: string;
+// }
 
 export interface UserInterface {
   lastLoginAt: string;
@@ -19,4 +42,4 @@ export interface UserInterface {
   email: string;
 }
 
-export type RoleLevel = "user" | "admin" | "super";
+export type RoleLevel = "employee" | "payroll manager" | "super admin";

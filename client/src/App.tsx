@@ -1,4 +1,8 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import {
   CssBaseline,
@@ -10,16 +14,20 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { useMemo } from "react";
 import { RoleLevel } from "./utils/interface";
-import RouteProvider from "./route";
+import RouteProviderPlain from "./route/router6v4";
 
 export default function App() {
   const mode: PaletteMode = useSelector((state: RootState) => state.theme.mode);
-  const role = useSelector(
+  const role: RoleLevel = useSelector(
     (state: RootState) => state.auth.user?.role as RoleLevel
   );
-  // console.log("Role", role);
   // Update the theme only if the mode changes
   const theme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
+
+  const router = useMemo(
+    () => createBrowserRouter(RouteProviderPlain(role)),
+    [role]
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -27,10 +35,12 @@ export default function App() {
       <CssBaseline />
 
       {/* Routing */}
-      <BrowserRouter>
-        {/* Dynamically assigning routes according to access level */}
-        {<RouteProvider role={role} />}
-      </BrowserRouter>
+      {/* <BrowserRouter> */}
+      {/* Dynamically assigning routes according to access level */}
+      {/* {<RouteProvider role={role} />} */}
+      {/* </BrowserRouter> */}
+
+      <RouterProvider router={router} />
 
       {/* React-Toaster */}
       <Toaster />

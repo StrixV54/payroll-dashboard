@@ -1,3 +1,5 @@
+import { RoleLevel } from "./interface";
+
 export const StylesConstant = {
   divCenterStyle: {
     display: "flex",
@@ -28,6 +30,12 @@ export const StylesConstant = {
   },
 };
 
+export const UserRoleLevel = {
+  EMPLOYEE: "employee",
+  PAYROLL_MANAGER: "payroll manager",
+  SUPER_ADMIN: "super admin",
+};
+
 export const ColorConstant = {
   // THEME - TEAL
   TEAL_BG: "#041215",
@@ -40,3 +48,19 @@ export const ColorConstant = {
   COOL_YELLOW: "#ffc007",
   COOL_GREEN: "#198d27",
 };
+
+// const getDesignToken = (mode: PaletteMode) => {
+//   switch("")
+// };
+
+// const theme = createTheme({
+//   components: {
+//     MuiCssBaseline: {
+//       styleOverrides: `
+//         h1 {
+//           color: grey;
+//         }
+//       `,
+//     },
+//   },
+// });

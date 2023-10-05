@@ -19,6 +19,7 @@ import { useDispatch } from "react-redux";
 import Loading from "./Loading";
 import { FcGoogle } from "react-icons/fc";
 import { UserInfoLogin } from "../utils/interface";
+import { firebaseAuth } from "../firebase/config";
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(true);
@@ -27,12 +28,13 @@ export default function SignIn() {
 
   useEffect(() => {
     // checks current state of auth locally
-    // firebaseAuth.onAuthStateChanged((user) => {
-    //   if (user) navigate("/");
-    //   // just to persist loading effect for sometime
-    //   setTimeout(() => setIsLoading(false), 500);
-    // });
-    setTimeout(() => setIsLoading(false), 500);
+    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+      if (user) navigate("/");
+      // just to persist loading effect for sometime
+      setTimeout(() => setIsLoading(false), 500);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -47,7 +49,7 @@ export default function SignIn() {
       password: data.get("password") as string,
     };
     signInAPI(userInfo.email, userInfo.password)
-      .then(() => navigate("/dashboard"))
+      // .then(() => navigate("/dashboard"))
       .finally(() => {
         setIsLoading(false);
       });

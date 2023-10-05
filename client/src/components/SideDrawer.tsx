@@ -13,14 +13,13 @@ import {
 import { StylesConstant } from "../utils/constants";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import { it } from "node:test";
 import { RoleLevel } from "../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
 export const sidebarAccessLevelUser = (role: RoleLevel) => {
   switch (role) {
-    case "user":
+    case "employee":
       return [
         {
           section: "Data",
@@ -38,8 +37,12 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
             { title: "FAQs", route: "/faqs" },
           ],
         },
+        {
+          section: "Account",
+          routeList: [{ title: "Job Details", route: "/jobdetails" }],
+        },
       ];
-    case "admin":
+    case "payroll manager":
       return [
         {
           section: "Data",
@@ -58,13 +61,20 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
             { title: "FAQs", route: "/faqs" },
           ],
         },
+        {
+          section: "Account",
+          routeList: [{ title: "Job Details", route: "/jobdetails" }],
+        },
       ];
   }
 };
 
 export default function SideDrawer() {
-  const role = useSelector((state: RootState) => state.auth.user?.role) as RoleLevel;
+  const role = useSelector(
+    (state: RootState) => state.auth.user?.role
+  ) as RoleLevel;
 
+  console.log(role);
   return (
     <Drawer
       variant="permanent"
@@ -99,7 +109,7 @@ export default function SideDrawer() {
           ))}
         </List>
         <Divider />
-        {sidebarAccessLevelUser(role)!.map((item, index) => {
+        {sidebarAccessLevelUser(role)?.map((item, index) => {
           return (
             <List key={index}>
               <Typography component="div" variant="overline" gutterBottom>

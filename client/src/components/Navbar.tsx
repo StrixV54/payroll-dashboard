@@ -17,8 +17,6 @@ import { StylesConstant } from "../utils/constants";
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const user = useSelector((state: RootState) => state.auth.user);
-  // const { toggleColorMode } = useContext(ColorModeContext);
-  // const auth = getAuth();
   const navigate = useNavigate();
 
   const handleMenu = (event: MouseEvent<HTMLElement>) => {
@@ -71,7 +69,7 @@ export default function Navbar() {
             id="menu-appbar"
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: "top",
+              vertical: "bottom",
               horizontal: "right",
             }}
             keepMounted
@@ -82,8 +80,9 @@ export default function Navbar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={() => navigate("/viewprofile")}>
+              View Profile
+            </MenuItem>
             <MenuItem onClick={signOutHandle}>Sign Out</MenuItem>
           </Menu>
         </Box>

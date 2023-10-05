@@ -2,8 +2,9 @@ import { Container, Typography } from "@mui/material";
 import { useLocation, useRouteError } from "react-router-dom";
 import { StylesConstant } from "../utils/constants";
 
-export default function NoMatch() {
-  let location = useLocation();
+export default function ErrorPage() {
+  const error: any = useRouteError();
+  const location = useLocation();
 
   return (
     <Container
@@ -22,23 +23,9 @@ export default function NoMatch() {
         administrator.
       </Typography>
       <Typography variant="body2" gutterBottom>
-        No match for <code>{location.pathname}</code>
+        No match for <code>{location.pathname}</code>. &nbsp;
+        {error.statusText || error.message}
       </Typography>
     </Container>
   );
 }
-
-// export default function ErrorPage() {
-//   const error: any = useRouteError();
-//   console.error(error);
-
-//   return (
-//     <div id="error-page">
-//       <h1>Oops!</h1>
-//       <p>Sorry, an unexpected error has occurred.</p>
-//       <p>
-//         <i>{error.statusText || error.message}</i>
-//       </p>
-//     </div>
-//   );
-// }

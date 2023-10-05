@@ -11,12 +11,13 @@ import SignOut from "../pages/SignOut";
 
 export default function RouteProvider({ role }: { role: RoleLevel }) {
   switch (role) {
-    case "user":
+    case "employee":
       return (
         <Routes>
-          <Route path="/" element={<Navigate to="/signin" />} />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/jobdetails" element={<Department />} />
           </Route>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
@@ -24,7 +25,21 @@ export default function RouteProvider({ role }: { role: RoleLevel }) {
           <Route path="*" element={<NoMatch />} />
         </Routes>
       );
-    case "admin":
+    case "payroll manager":
+      return (
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/department" element={<Department />} />
+          </Route>
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signout" element={<SignOut />} />
+          <Route path="*" element={<NoMatch />} />
+        </Routes>
+      );
+    case "super admin":
       return (
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" />} />
@@ -41,10 +56,7 @@ export default function RouteProvider({ role }: { role: RoleLevel }) {
     default:
       return (
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-          <Route element={<Layout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Route>
+          <Route path="/" element={<Navigate to="/signin" />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signout" element={<SignOut />} />

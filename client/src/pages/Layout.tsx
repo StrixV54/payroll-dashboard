@@ -3,7 +3,7 @@ import { firebaseAuth } from "../firebase/config";
 import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import { Box } from "@mui/material";
-import { getUserDetailAPI } from "../firebase/api";
+import { collectionUser, getUserDetailsAPI } from "../firebase/api";
 import { useDispatch } from "react-redux";
 import { userIsAuthentic } from "../redux/authSlice";
 import SideDrawer from "../components/SideDrawer";
@@ -15,18 +15,15 @@ export default function HomeLayout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
       if (!user) {
         navigate("/signin");
         return;
       }
-      const checkUser = async () => {
-        //Fetch user detail
-        const userInfo = await getUserDetailAPI(user.uid);
-        dispatch(userIsAuthentic(userInfo as object));
-        setIsLoading(false);
-      };
-      checkUser();
+      //Fetch user detail
+      const userInfo = await getUserDetailsAPI(collectionUser, user.uid);
+      dispatch(userIsAuthentic(userInfo as object));
+      setIsLoading(false);
     });
 
     return () => unsubscribe();

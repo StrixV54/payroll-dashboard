@@ -40,17 +40,6 @@ export default function Navbar() {
         <Typography variant="h6" component="h6" fontWeight="bold" mr={4}>
           ZUCO
         </Typography>
-        {/* <div style={{ flexGrow: 1 }}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </div> */}
         <Box sx={StylesConstant.divCenterStyle}>
           <Typography variant="body2">
             {user?.displayName} : {user?.role}

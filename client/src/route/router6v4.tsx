@@ -9,6 +9,7 @@ import SignOut from "../pages/SignOut";
 import ErrorPage from "../pages/ErrorPage";
 import ViewProfile from "../pages/ViewProfile";
 import JobDetails from "../pages/JobDetails";
+import Users from "../pages/Users";
 
 export default function RouteProviderPlain(role: RoleLevel) {
   switch (role) {
@@ -48,6 +49,10 @@ export default function RouteProviderPlain(role: RoleLevel) {
                 {
                   path: "jobdetails",
                   Component: JobDetails,
+                },
+                {
+                  path: "users",
+                  Component: Users,
                 },
               ],
             },
@@ -90,6 +95,10 @@ export default function RouteProviderPlain(role: RoleLevel) {
                 {
                   path: "jobdetails",
                   Component: JobDetails,
+                },
+                {
+                  path: "users",
+                  Component: Users,
                 },
               ],
             },

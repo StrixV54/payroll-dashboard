@@ -13,6 +13,16 @@ export interface UserInfoLogin {
   employeeid?: string;
 }
 
+export interface UserInfoFirebase {
+  email: string;
+  role: string;
+  displayName: string;
+  lastLoginAt: string;
+  phoneNumber: string;
+  dateofbirth: string;
+  employeeid: string;
+}
+
 export interface UserInfoPersonal {
   currentaddress: string;
   maritialstatus: string;

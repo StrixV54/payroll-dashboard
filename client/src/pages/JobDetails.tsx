@@ -1,8 +1,7 @@
 import { Box, Button, Grid, TextField } from "@mui/material";
 import { StylesConstant, UserRoleLevel } from "../utils/constants";
 import { FormEvent, useEffect, useState } from "react";
-import { firebaseAuth } from "../firebase/config";
-import { UserInfoJob, UserInfoPersonal } from "../utils/interface";
+import { UserInfoJob } from "../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import toast from "react-hot-toast";
@@ -27,19 +26,18 @@ export default function JobDetails() {
   const role = useSelector((state: RootState) => state.auth.user?.role);
 
   useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
-      //Fetch user detail
+    //Fetch user detail
+    const fetch = async () => {
       const infoJob = (await getUserDetailsAPI(
         collectionUserJobDetails,
-        user!.uid
+        uid as string
       )) as UserInfoJob;
       setBasicInfoJob(infoJob);
-    });
-
-    return () => unsubscribe();
+    };
+    fetch();
   }, []);
 
-  console.log(basicInfoJob);
+  // console.log(basicInfoJob);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     if (role === UserRoleLevel.EMPLOYEE) return;

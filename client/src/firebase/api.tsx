@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { firebaseAuth, firebaseGoogleAuth, firestoreDB } from "./config";
 import {
+  QueryConstraint,
   QueryFieldFilterConstraint,
   SnapshotOptions,
   collection,
@@ -45,8 +46,8 @@ export const signUpAPI = ({
         displayName: first?.concat(" ", last!),
         email,
         uid: res.user?.uid,
-        dateofbirth,
-        employeeid,
+        dateOfBirth: dateofbirth,
+        employeeId: employeeid,
         role: "employee" as RoleLevel, // ["employee", "payroll manager", "super admin"]
         lastLoginAt: new Date().toLocaleString(),
       });
@@ -89,7 +90,7 @@ export const signInAPI = (email: string, password: string) => {
 //   return undefined;
 // };
 
-export const queryUserAPI = async (queryFilter: QueryFieldFilterConstraint) => {
+export const queryUserAPI = async (queryFilter: QueryConstraint) => {
   // creates a reference to the collection
   const userRef = collection(firestoreDB, collectionUser);
 

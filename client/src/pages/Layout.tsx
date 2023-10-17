@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { userIsAuthentic } from "../redux/authSlice";
 import SideDrawer from "../components/SideDrawer";
 import Navbar from "../components/Navbar";
+import { ColorConstant } from "../utils/constants";
 
 export default function HomeLayout() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function HomeLayout() {
       }
       //Fetch user detail
       const userInfo = await getUserDetailsAPI(collectionUser, user.uid);
+      localStorage.setItem("roleLevel", userInfo?.role);
       dispatch(userIsAuthentic(userInfo as object));
       setIsLoading(false);
     });
@@ -32,7 +34,14 @@ export default function HomeLayout() {
   return isLoading ? (
     <Loading message="Checking Login !!" />
   ) : (
-    <Box sx={{ display: "flex", flexGrow: 1 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexGrow: 1,
+        height: "100vh",
+        backgroundColor: ColorConstant.TEAL_BG,
+      }}
+    >
       {/*  ------ Navbar ------ */}
       <Navbar />
       {/*  ------ SideBar ------ */}
@@ -44,6 +53,12 @@ export default function HomeLayout() {
           flexGrow: 1,
           // height: "calc(100vh - 80px)",
           mt: "80px",
+          padding: 2,
+          mr: "15px",
+          mb: "15px",
+          borderRadius: 3,
+          backgroundColor: ColorConstant.BLACK,
+          overflow: "scroll",
         }}
       >
         <Outlet />

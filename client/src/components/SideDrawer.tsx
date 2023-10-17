@@ -10,7 +10,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { StylesConstant } from "../utils/constants";
+import { ColorConstant, StylesConstant } from "../utils/constants";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { RoleLevel } from "../utils/interface";
@@ -23,19 +23,11 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
       return [
         {
           section: "Data",
-          routeList: [
-            { title: "Department", route: "/department" },
-            { title: "Teams", route: "/teams" },
-            { title: "Users", route: "/users" },
-          ],
+          routeList: [{ title: "Users", route: "/users" }],
         },
         {
           section: "Pages",
-          routeList: [
-            { title: "Charts", route: "/charts" },
-            { title: "Calender", route: "/calender" },
-            { title: "FAQs", route: "/faqs" },
-          ],
+          routeList: [{ title: "FAQs", route: "/faqs" }],
         },
         {
           section: "Account",
@@ -74,7 +66,7 @@ export default function SideDrawer() {
     (state: RootState) => state.auth.user?.role
   ) as RoleLevel;
 
-  console.log(role);
+  // console.log(role);
   return (
     <Drawer
       variant="permanent"
@@ -82,14 +74,17 @@ export default function SideDrawer() {
       sx={{
         width: 250,
         flexShrink: 0,
+        backgroundColor: ColorConstant.TEAL_BG,
         [`& .MuiDrawer-paper`]: {
           width: 250,
+          backgroundColor: ColorConstant.TEAL_BG,
           boxSizing: "border-box",
+          borderRight: "none",
         },
       }}
     >
-      <Toolbar sx={{ height: "100px" }} />
-      <Box sx={{ overflow: "auto", paddingX: "16px" }}>
+      <Toolbar sx={{ height: "80px" }} />
+      <Box sx={{ overflow: "auto", paddingX: "16px", borderRight: "none" }}>
         <List>
           {["Dashboard"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ mb: 1 }}>

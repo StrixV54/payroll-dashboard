@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { UserInfoFirebase } from "../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -8,16 +8,19 @@ import {
   DataGrid,
   GridActionsCellItem,
   GridColDef,
-  GridRowId,
+  GridRowParams,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { UserRoleLevel } from "../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 export default function Users() {
   const [usersInfo, setUsersInfo] = useState<UserInfoFirebase[] | []>();
   const uid = useSelector((state: RootState) => state.auth.user?.uid);
   const role = useSelector((state: RootState) => state.auth.user?.role);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     //Fetch user detail
@@ -33,6 +36,13 @@ export default function Users() {
     return { ...item, id: index };
   });
 
+  const handleEditBtn = (props: GridRowParams<any>) => {
+    const { uid, displayName } = props.row;
+    navigate("/userdetails?name=" + displayName, {
+      state: { uid, displayName },
+    });
+  };
+
   const columns: GridColDef[] = [
     {
       field: "displayName",
@@ -46,9 +56,15 @@ export default function Users() {
     {
       field: "actions",
       type: "actions",
+      headerName: "Actions",
       width: 100,
-      getActions: ({ id }) => [
-        <GridActionsCellItem icon={<EditIcon />} label="Edit" />,
+      hideable: role === UserRoleLevel.EMPLOYEE,
+      getActions: (props) => [
+        <GridActionsCellItem
+          icon={<EditIcon />}
+          label="Edit"
+          onClick={() => handleEditBtn(props)}
+        />,
         <GridActionsCellItem icon={<DeleteIcon />} label="Delete" />,
       ],
     },
@@ -62,13 +78,16 @@ export default function Users() {
     <DataGrid
       rows={rows as any[]}
       columns={columns}
+      sx={{ border: "none" }}
+      columnVisibilityModel={{
+        actions: role !== UserRoleLevel.EMPLOYEE,
+      }}
       initialState={{
         pagination: {
-          paginationModel: { page: 0, pageSize: 5 },
+          paginationModel: { page: 0, pageSize: 25 },
         },
       }}
-      pageSizeOptions={[5, 10]}
-      checkboxSelection
+      pageSizeOptions={[25, 50]}
     />
   );
 }

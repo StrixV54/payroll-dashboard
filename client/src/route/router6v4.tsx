@@ -8,7 +8,7 @@ import SignIn from "../pages/SignIn";
 import SignOut from "../pages/SignOut";
 import ErrorPage from "../pages/ErrorPage";
 import ViewProfile from "../pages/ViewProfile";
-import JobDetails from "../pages/JobDetails";
+import UserDetails from "../pages/UserDetailsPage/UserDetails";
 import Users from "../pages/Users";
 
 export default function RouteProviderPlain(role: RoleLevel) {
@@ -31,7 +31,6 @@ export default function RouteProviderPlain(role: RoleLevel) {
               Component: SignOut,
             },
             {
-              path: "/",
               Component: Layout,
               children: [
                 {
@@ -39,19 +38,19 @@ export default function RouteProviderPlain(role: RoleLevel) {
                   element: <Navigate to="/dashboard" />,
                 },
                 {
-                  path: "dashboard",
+                  path: "/dashboard",
                   Component: Dashboard,
                 },
                 {
-                  path: "viewprofile",
-                  Component: ViewProfile,
+                  path: "/department",
+                  Component: Department,
                 },
                 {
-                  path: "jobdetails",
-                  Component: JobDetails,
+                  path: "/userdetails",
+                  Component: UserDetails,
                 },
                 {
-                  path: "users",
+                  path: "/users",
                   Component: Users,
                 },
               ],
@@ -77,7 +76,6 @@ export default function RouteProviderPlain(role: RoleLevel) {
               Component: SignOut,
             },
             {
-              path: "/",
               Component: Layout,
               children: [
                 {
@@ -85,19 +83,19 @@ export default function RouteProviderPlain(role: RoleLevel) {
                   element: <Navigate to="/dashboard" />,
                 },
                 {
-                  path: "dashboard",
+                  path: "/dashboard",
                   Component: Dashboard,
                 },
                 {
-                  path: "department",
+                  path: "/department",
                   Component: Department,
                 },
                 {
-                  path: "jobdetails",
-                  Component: JobDetails,
+                  path: "/userdetails",
+                  Component: UserDetails,
                 },
                 {
-                  path: "users",
+                  path: "/users",
                   Component: Users,
                 },
               ],
@@ -123,7 +121,6 @@ export default function RouteProviderPlain(role: RoleLevel) {
               Component: SignOut,
             },
             {
-              path: "/",
               Component: Layout,
               children: [
                 {
@@ -142,35 +139,8 @@ export default function RouteProviderPlain(role: RoleLevel) {
     default:
       return [
         {
-          errorElement: <ErrorPage />,
-          children: [
-            {
-              path: "/signin",
-              Component: SignIn,
-            },
-            {
-              path: "/signup",
-              Component: SignUp,
-            },
-            {
-              path: "/signout",
-              Component: SignOut,
-            },
-            {
-              path: "/",
-              Component: Layout,
-              children: [
-                {
-                  path: "/",
-                  element: <Navigate to="/dashboard" />,
-                },
-                {
-                  path: "/dashboard",
-                  Component: Dashboard,
-                },
-              ],
-            },
-          ],
+          path: "*",
+          Component: ErrorPage,
         },
       ];
   }

@@ -15,12 +15,14 @@ import { RootState } from "./redux/store";
 import { useMemo } from "react";
 import { RoleLevel } from "./utils/interface";
 import RouteProviderPlain from "./route/router6v4";
+// import RouteProvider from "./route";
 
 export default function App() {
   const mode: PaletteMode = useSelector((state: RootState) => state.theme.mode);
   const role: RoleLevel = useSelector(
     (state: RootState) => state.auth.user?.role as RoleLevel
-  );
+  ) || localStorage.getItem("roleLevel");
+  console.log(role);
   // Update the theme only if the mode changes
   const theme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
 
@@ -36,8 +38,8 @@ export default function App() {
 
       {/* Routing */}
       {/* <BrowserRouter> */}
-      {/* Dynamically assigning routes according to access level */}
-      {/* {<RouteProvider role={role} />} */}
+        {/* Dynamically assigning routes according to access level */}
+        {/* {<RouteProvider role={role} />} */}
       {/* </BrowserRouter> */}
 
       <RouterProvider router={router} />

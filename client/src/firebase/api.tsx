@@ -25,15 +25,15 @@ export const collectionUser = "users";
 const collectionIdGenerator = "uniqueIdGenerator";
 const docIdGenerator = "randomId";
 export const collectionUserDetails = "usersDetails";
-export const collectionUserJobDetails = "usersJobDetails";
+export const collectionUserSalaryDetails = "usersSalaryDetails";
 
 export const signUpAPI = ({
   first,
   last,
   email,
   password,
-  dateofbirth,
-  employeeid,
+  dateOfBirth,
+  employeeId,
 }: UserInfoLogin) => {
   return createUserWithEmailAndPassword(firebaseAuth, email, password)
     .then(async (res) => {
@@ -46,8 +46,8 @@ export const signUpAPI = ({
         displayName: first?.concat(" ", last!),
         email,
         uid: res.user?.uid,
-        dateOfBirth: dateofbirth,
-        employeeId: employeeid,
+        dateOfBirth,
+        employeeId,
         role: "employee" as RoleLevel, // ["employee", "payroll manager", "super admin"]
         lastLoginAt: new Date().toLocaleString(),
       });
@@ -185,4 +185,34 @@ export const getUserDetailsAPI = async (collection: string, uid: string) => {
     console.log("No such document exists!");
   }
   return undefined;
+};
+
+export const setUserSalaryAPI = async (
+  collection: string,
+  document: object,
+  uid: string,
+  year: string,
+  month: string
+) => {
+  await setDoc(doc(firestoreDB, collection + "/" + uid + "/" + year, month), {
+    document,
+  });
+};
+
+export const getUserSalaryAPI = async (
+  collectionType: string,
+  uid: string,
+  year: string
+) => {
+  const userRef = collection(
+    firestoreDB,
+    collectionType + "/" + uid + "/" + year
+  );
+  const querySnapshot = await getDocs(userRef);
+  let result: SnapshotOptions[] = [];
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    result.push(doc.data());
+  });
+  return result;
 };

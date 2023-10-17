@@ -9,8 +9,10 @@ export interface UserInfoLogin {
   first?: string;
   last?: string;
   phoneNumber?: string;
-  dateofbirth?: string;
-  employeeid?: string;
+  dateOfBirth?: string;
+  employeeId?: string;
+  grade?: string;
+  department?: string;
 }
 
 export interface UserInfoFirebase {
@@ -19,30 +21,34 @@ export interface UserInfoFirebase {
   displayName: string;
   lastLoginAt: string;
   phoneNumber: string;
-  dateofbirth: string;
-  employeeid: string;
+  dateOfBirth: string;
+  employeeId: string;
+  grade: string;
+  uid?: string;
+  department: string;
 }
 
 export interface UserInfoPersonal {
-  currentaddress: string;
-  maritialstatus: string;
-  workskills: string;
-}
-export interface UserInfoJob {
+  currentAddress?: string;
+  maritialStatus?: string;
+  workSkills?: string;
   salary: string;
   aadhar: string;
   pancard: string;
-  pfaaccount: string;
-  datejoined: string;
+  pfaAccount: string;
+  dateJoined: string;
   manager: string;
 }
 
-// export interface UserSalaryAdmin {
-//   basic: string;
-//   hra: string;
-//   pancard: string;
-//   pfaaccout: string;
-// }
+export interface UserInfoSalary {
+  basicSalary: string;
+  hra: string;
+  totalSalary: string;
+  taxDeduction: string;
+  month: string;
+  year: string;
+  employeeId: string;
+}
 
 export interface UserInterface {
   lastLoginAt: string;

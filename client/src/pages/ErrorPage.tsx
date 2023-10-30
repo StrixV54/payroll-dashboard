@@ -24,7 +24,7 @@ export default function ErrorPage() {
       </Typography>
       <Typography variant="body2" gutterBottom>
         No match for <code>{location.pathname}</code>. &nbsp;
-        {error.statusText || error.message}
+        {/* {error.statusText || error.message} */}
       </Typography>
     </Container>
   );

@@ -1,5 +1,6 @@
 import { MouseEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ProfilePicture from "../assets/profilePict.jpg";
 import {
   AppBar,
   Box,
@@ -79,8 +80,21 @@ export default function Navbar() {
             aria-haspopup="true"
             onClick={handleMenu}
             color="inherit"
+            sx={{ p: 0, ml: 1 }}
           >
-            <AccountCircle sx={{ fontSize: "2.2rem" }} />
+            <img
+              alt="profile-pic"
+              src={ProfilePicture}
+              style={{
+                height: "2.5rem",
+                width: "2.5rem",
+                backgroundColor: "#138058",
+                backgroundSize: "auto",
+                backgroundRepeat: "no-repeat",
+                borderRadius: "50%",
+              }}
+            />
+            {/* <AccountCircle sx={{ fontSize: "2s.2rem" }} /> */}
           </IconButton>
           <Menu
             id="menu-appbar"

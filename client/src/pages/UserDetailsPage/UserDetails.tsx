@@ -32,8 +32,8 @@ export default function JobDetails() {
   };
 
   return (
-    <>
-      <Typography variant="h6" gutterBottom mb={4}>
+    <Box>
+      <Typography variant="h6" gutterBottom mb={4} component={"p"}>
         User: {displayName}
       </Typography>
       <Box sx={{ width: "100%" }}>
@@ -54,6 +54,6 @@ export default function JobDetails() {
           <SalaryInfo uid={uid} />
         </CustomTabPanel>
       </Box>
-    </>
+    </Box>
   );
 }

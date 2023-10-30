@@ -51,14 +51,12 @@ export default function HomeLayout() {
         component="main"
         sx={{
           flexGrow: 1,
-          // height: "calc(100vh - 80px)",
           mt: "80px",
-          padding: 2,
-          mr: "15px",
-          mb: "15px",
+          padding: 3,
           borderRadius: 3,
           backgroundColor: ColorConstant.BLACK,
           overflow: "scroll",
+          display: "flex",
         }}
       >
         <Outlet />

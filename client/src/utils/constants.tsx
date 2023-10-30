@@ -28,6 +28,57 @@ export const StylesConstant = {
       bgcolor: "#0d4250",
     },
   },
+  gradientEffectDark: {
+    "&:before": {
+      content: "''",
+      position: "absolute",
+      width: "210px",
+      height: "210px",
+      background:
+        "linear-gradient(140.9deg, rgb(57, 169, 165) -14.02%, rgba(144, 202, 249, 0) 85.5%)",
+      borderRadius: "50%",
+      top: "-125px",
+      right: "-15px",
+      opacity: "0.5",
+    },
+    "&:after": {
+      content: "''",
+      position: "absolute",
+      width: "210px",
+      height: "210px",
+      background:
+        "linear-gradient(210.04deg, rgb(57, 169, 165) -50.94%, rgba(144, 202, 249, 0) 95.49%)",
+      borderRadius: "50%",
+      top: "-85px",
+      right: "-95px",
+    },
+  },
+  gradientEffectLight: {
+    "&:before": {
+      content: "''",
+      position: "absolute",
+      width: "210px",
+      height: "210px",
+      background:
+        "linear-gradient(140.9deg, rgb(57, 169, 165) -14.02%, rgba(144, 202, 249, 0) 85.5%)",
+      borderRadius: "50%",
+      top: "-125px",
+      right: "-15px",
+      opacity: "0.3",
+    },
+    "&:after": {
+      content: "''",
+      position: "absolute",
+      width: "210px",
+      height: "210px",
+      background:
+        "linear-gradient(210.04deg, rgb(57, 169, 165) -24.94%, rgba(144, 202, 249, 0) 95.49%)",
+      borderRadius: "50%",
+      opacity: "0.3",
+      top: "-85px",
+      right: "-95px",
+    },
+  },
 };
 
 export const UserRoleLevel = {

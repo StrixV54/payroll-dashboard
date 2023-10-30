@@ -50,6 +50,10 @@ export default function RouteProviderPlain(role: RoleLevel) {
                   Component: UserDetails,
                 },
                 {
+                  path: "/viewprofile",
+                  Component: ViewProfile,
+                },
+                {
                   path: "/users",
                   Component: Users,
                 },
@@ -93,6 +97,10 @@ export default function RouteProviderPlain(role: RoleLevel) {
                 {
                   path: "/userdetails",
                   Component: UserDetails,
+                },
+                {
+                  path: "/viewprofile",
+                  Component: ViewProfile,
                 },
                 {
                   path: "/users",

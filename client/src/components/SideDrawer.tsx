@@ -9,6 +9,7 @@ import {
   ListItemText,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { StylesConstant } from "../utils/constants";
 import { NavLink as ReactRouterLink } from "react-router-dom";
@@ -17,10 +18,15 @@ import { it } from "node:test";
 import { RoleLevel } from "../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import themeSlice from "../redux/themeSlice";
 
 export const sidebarAccessLevelUser = (role: RoleLevel) => {
   switch (role) {
+<<<<<<< Updated upstream
     case "user":
+=======
+    case "Employee":
+>>>>>>> Stashed changes
       return [
         {
           section: "Data",
@@ -39,7 +45,11 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
           ],
         },
       ];
+<<<<<<< Updated upstream
     case "admin":
+=======
+    case "Payroll Manager":
+>>>>>>> Stashed changes
       return [
         {
           section: "Data",
@@ -59,11 +69,36 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
           ],
         },
       ];
+    case "Super Admin":
+      return [
+        {
+          section: "Data",
+          routeList: [
+            { title: "Users", route: "/users" },
+            { title: "Add User", route: "/adduser" },
+          ],
+        },
+        {
+          section: "Pages",
+          routeList: [{ title: "FAQs", route: "/faqs" }],
+        },
+        {
+          section: "Account",
+          routeList: [{ title: "Job Details", route: "/jobdetails" }],
+        },
+      ];
   }
 };
 
 export default function SideDrawer() {
+<<<<<<< Updated upstream
   const role = useSelector((state: RootState) => state.auth.user?.role) as RoleLevel;
+=======
+  const theme = useTheme();
+  const role = useSelector(
+    (state: RootState) => state.auth.user?.role
+  ) as RoleLevel;
+>>>>>>> Stashed changes
 
   return (
     <Drawer
@@ -72,8 +107,15 @@ export default function SideDrawer() {
       sx={{
         width: 250,
         flexShrink: 0,
+<<<<<<< Updated upstream
         [`& .MuiDrawer-paper`]: {
           width: 250,
+=======
+        backgroundColor: theme.palette.background.appbar,
+        [`& .MuiDrawer-paper`]: {
+          width: 250,
+          backgroundColor: theme.palette.background.appbar,
+>>>>>>> Stashed changes
           boxSizing: "border-box",
         },
       }}
@@ -85,7 +127,13 @@ export default function SideDrawer() {
             <ListItem key={text} disablePadding sx={{ mb: 1 }}>
               <ListItemButton
                 sx={{
-                  ...StylesConstant.drawerListItem,
+                  borderRadius: "8px",
+                  "&:hover": {
+                    bgcolor: theme.palette.background.sidebarHover,
+                  },
+                  "&.active": {
+                    bgcolor: theme.palette.background.sidebar,
+                  },
                 }}
                 component={ReactRouterLink}
                 to={"/" + text.toLowerCase()}
@@ -109,7 +157,15 @@ export default function SideDrawer() {
                 return (
                   <ListItem key={index} disablePadding sx={{ mb: 1 }}>
                     <ListItemButton
-                      sx={StylesConstant.drawerListItem}
+                      sx={{
+                        borderRadius: "8px",
+                        "&:hover": {
+                          bgcolor: theme.palette.background.sidebarHover,
+                        },
+                        "&.active": {
+                          bgcolor: theme.palette.background.sidebar,
+                        },
+                      }}
                       component={ReactRouterLink}
                       to={text.route.toLowerCase()}
                     >

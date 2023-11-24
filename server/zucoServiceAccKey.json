@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "zuco-payroll",
+  "private_key_id": "a603245188a90b4ae17881aeafc5d2aa0256fc12",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCv9kGNpaadc2JV\nMthRP2Um8COGRft5NVqYdlBtLg5Dmj8WD1tLwjOGekNx6zmURIClJVCbEvcG07HD\nrfq9NnVGtK9nx/1rEWeV3ONkHolamTYmth0ajKiueEVVbBd4h5/QlXHpAwKVJWWO\nOC+KJ63Yss9JvdmnJE1ycDcPHm4RASakP42X2Lg0Qpv/mFCiYerhdiWDpxpf8/nv\nWepuh7g9gBtC8dVf4GY9lxJCw++IgHXWINbI0Vc0UZow1ndoG3+Ho5GxhmgklGH8\nDAS2fZGeNJVmPGotVjBbhlcLjj73tCewNmd0A3LZbmYkptAF5wRwc2avlAke97bS\njXFYje6ZAgMBAAECggEABwphJpgDcebZPyP07FFPTI7MuRVpQbkNCi8nuiqe1v0f\nu5P7OO2JDr8rHi6FhAV2qUT0M/Q/DpafVP9L2lDIwf6+SvaBUQyl+qTXM10WbVnW\nhReB1BtfL3Xv/kJAMSoqDphAMczVSF7x8I4Wdt5uEg7bhO2T/SBSefr79P6odEUo\nkrn14v/4WnSXrmRodqfe8j3YXK3oFtvbwNV4HAx49Wy773pqf3NHOGFA2ZGbJo7b\nfO91/l85uRInlkOPGEzdryG9Uavn+jq7mLwVnwkuq9tcmUehszs//CDPzds9a1xY\n8LQbImxK/YDbS/QxE1En0cHeJngSuMCpiumHLBVAZQKBgQD4evUjrvS/hoNjIFz1\ndaivL3ZhwJT688V4q3Bq0GVU0YLrrMHmdoKbRVBR+GTyCUR92WEhvtlPqJGA1/9k\nBRSZF1PDUE5WgVrZ0vdHIwVrchSecuAq3VDKRACaFibW4hstSX7N4aCzNQptlAZh\nj4Fvc//9kX165D81ZfupsFyJxQKBgQC1SXrGwYlpwumm2WoVleIOKonxvdJSgQFq\nR6xj3aHQaC/qkZbCoHYoh2xW0qlPoiKCGYE1gbwT6lytA7IplgpXzqaAwFVqV5GC\njNZSnWwF87GaSibfSUot/kHSRgOt1BB97Eogx/cTU90rOhtQwkdN+L9GbWlyJ4xs\nR+EqhFjixQKBgGVI6YfEFyvCzuenF31OmpXeSOkLsS6iE0pex5IipEtwo2chomAo\nypA0Lsta7vrh4DNUWo2A19/qnHTils3UbFMC+TfSEjycucW0gutSUTE87T6xIMMY\nN4hbM8ubX/WTcPSC0tdlMzYZVsjX38oAzwf5Rs27cmSXiVRg37aJlw7pAoGBALSj\nEPl24wtFMjgUr0Xu4R6oeGcuc6HN9bEG1dl0f8X/6q7aftRTuyjLN8KTii1VKvlj\nnIHKUbOudMXYxu/1Fz1DJlloTDP4KX9iAjSzs22C01cfx/f5OTb3AHMbXJMamYw/\no+ViGulhSSHHdmxUCWTCFSWB4+3hRmSmgtAwq7jZAoGBAOezRtAtHr1I+8cRdKsV\nIfcdNH8QBRhpwUmGSm6mtOwofso7i6R640Asqa3YYvEdld0tg6lnnglrPLVe5BuP\n6YsvdszlUJsgY92JY8tfg7paJ/G4n3++QzMyGMMVMSAFAr5lYbTBpxL5phbFXUtb\nCd7lcjLkQtmbKGfgph0yXFud\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-7ybgv@zuco-payroll.iam.gserviceaccount.com",
+  "client_id": "105226576302024418375",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-7ybgv%40zuco-payroll.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

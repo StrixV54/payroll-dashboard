@@ -48,6 +48,15 @@ export default function SignUp() {
       password: data.get("password") as string,
       first: data.get("firstName") as string,
       last: data.get("lastName") as string,
+<<<<<<< Updated upstream
+=======
+      dateOfBirth: dateofbirth!,
+      status: "new",
+      employeeId: await generateEmployeeIdAPI(
+        data.get("firstName") as string,
+        data.get("lastName") as string
+      ),
+>>>>>>> Stashed changes
     };
     // navigate("/fill-info", { state: userInfo });
     signUpAPI(

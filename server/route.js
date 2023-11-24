@@ -1,8 +1,8 @@
 import express from "express";
-import { postSendOTP } from "./controller.js";
+import { createUserAPI } from "./controller.js";
 
 const router = express.Router();
 
-router.post("/sendotp", postSendOTP);
+router.post("/createUserAPI", createUserAPI);
 
 export default router;

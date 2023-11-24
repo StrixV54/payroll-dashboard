@@ -6,6 +6,7 @@ export interface FirebaseAPIError {
 export interface UserInfoLogin {
   email: string;
   password: string;
+  status?: string;
   first?: string;
   last?: string;
   phoneNumber?: string;
@@ -20,6 +21,7 @@ export interface UserInfoFirebase {
   role: string;
   displayName: string;
   lastLoginAt: string;
+  status: string;
   phoneNumber: string;
   dateOfBirth: string;
   employeeId: string;
@@ -38,6 +40,7 @@ export interface UserInfoPersonal {
   pfaAccount: string;
   dateJoined: string;
   manager: string;
+  uid?: string;
 }
 
 export interface UserInfoSalary {
@@ -58,4 +61,5 @@ export interface UserInterface {
   email: string;
 }
 
-export type RoleLevel = "employee" | "payroll manager" | "super admin";
+export type RoleLevel = "Employee" | "Payroll Manager" | "Super Admin";
+

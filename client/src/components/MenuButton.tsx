@@ -4,27 +4,20 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { MouseEvent, useState } from "react";
 import { ColorConstant } from "../utils/constants";
+import { useTheme } from "@mui/material";
 
 const options = [
-  "None",
-  "Atria",
-  "Callisto",
-  "Dione",
-  "Ganymede",
-  "Hangouts Call",
-  "Luna",
-  "Oberon",
-  "Phobos",
-  "Pyxis",
-  "Sedna",
-  "Titania",
-  "Triton",
-  "Umbriel",
+  "Import Card",
+  "Copy Data",
+  "Export",
+  "Archive File",
+  "Generate Report",
 ];
 
 const ITEM_HEIGHT = 48;
 
 export default function MenuButton() {
+  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -45,7 +38,7 @@ export default function MenuButton() {
         onClick={handleClick}
         sx={{
           borderRadius: 3,
-          backgroundColor: ColorConstant.BLACK,
+          backgroundColor: theme.palette.background.box,
         }}
       >
         <MoreVertIcon />

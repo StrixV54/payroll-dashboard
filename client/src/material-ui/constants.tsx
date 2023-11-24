@@ -36,3 +36,10 @@ export const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
+export const PALETTE_COLOR = {
+  light: { displayColor: "#b9b9b9", themeColor: "#0d8ce0" },
+  dark: { displayColor: "#292929", themeColor: "#1045a8" },
+  purple: { displayColor: "#6310a7", themeColor: "#b559f2" },
+  teal: { displayColor: "#0b8286", themeColor: "#12797c" },
+};

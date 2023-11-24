@@ -36,6 +36,16 @@ export const getFirebaseMessageFromCode = (code: string) => {
 
 export const printFirebaseError = (error: FirebaseAPIError): void => {
   console.log(`Got Error Code from Firebase: ${error.code}`);
-  toast.error(`ERROR : ${getFirebaseMessageFromCode(error?.code).quickMessage}`);
-  console.error(`ERROR : ${getFirebaseMessageFromCode(error?.code).detailedMessage}`);
+  toast.error(
+    `ERROR : ${getFirebaseMessageFromCode(error?.code).quickMessage}`
+  );
+  console.error(
+    `ERROR : ${getFirebaseMessageFromCode(error?.code).detailedMessage}`
+  );
 };
+
+export const numberFormat = (value: number) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+  }).format(value);

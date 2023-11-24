@@ -10,10 +10,11 @@ import ErrorPage from "../pages/ErrorPage";
 import ViewProfile from "../pages/ViewProfile";
 import UserDetails from "../pages/UserDetailsPage/UserDetails";
 import Users from "../pages/Users";
+import AddUser from "../pages/AddUser";
 
 export default function RouteProviderPlain(role: RoleLevel) {
   switch (role) {
-    case "employee":
+    case "Employee":
       return [
         {
           errorElement: <ErrorPage />,
@@ -62,7 +63,7 @@ export default function RouteProviderPlain(role: RoleLevel) {
           ],
         },
       ];
-    case "payroll manager":
+    case "Payroll Manager":
       return [
         {
           errorElement: <ErrorPage />,
@@ -111,7 +112,7 @@ export default function RouteProviderPlain(role: RoleLevel) {
           ],
         },
       ];
-    case "super admin":
+    case "Super Admin":
       return [
         {
           errorElement: <ErrorPage />,
@@ -138,6 +139,18 @@ export default function RouteProviderPlain(role: RoleLevel) {
                 {
                   path: "/dashboard",
                   Component: Dashboard,
+                },
+                {
+                  path: "/users",
+                  Component: Users,
+                },
+                {
+                  path: "/userdetails",
+                  Component: UserDetails,
+                },
+                {
+                  path: "/adduser",
+                  Component: AddUser,
                 },
               ],
             },
@@ -147,8 +160,34 @@ export default function RouteProviderPlain(role: RoleLevel) {
     default:
       return [
         {
-          path: "*",
-          Component: ErrorPage,
+          errorElement: <ErrorPage />,
+          children: [
+            {
+              path: "/signin",
+              Component: SignIn,
+            },
+            {
+              path: "/signup",
+              Component: SignUp,
+            },
+            {
+              path: "/signout",
+              Component: SignOut,
+            },
+            {
+              Component: Layout,
+              children: [
+                {
+                  path: "/",
+                  element: <Navigate to="/dashboard" />,
+                },
+                {
+                  path: "/dashboard",
+                  Component: Dashboard,
+                },
+              ],
+            },
+          ],
         },
       ];
   }

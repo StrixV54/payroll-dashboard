@@ -1,6 +1,9 @@
+
+import { useTheme } from "@mui/material";
 import { MayHaveLabel, ResponsivePie } from "@nivo/pie";
 
 export default function PieChart({ data }: { data: MayHaveLabel[] }) {
+  const theme = useTheme();
   return (
     <ResponsivePie
       data={data}
@@ -8,7 +11,7 @@ export default function PieChart({ data }: { data: MayHaveLabel[] }) {
       innerRadius={0.5}
       padAngle={0.7}
       theme={{
-        textColor: "#ffffff",
+        textColor: theme.palette.text.primary,
       }}
       cornerRadius={3}
       activeOuterRadiusOffset={8}
@@ -18,7 +21,7 @@ export default function PieChart({ data }: { data: MayHaveLabel[] }) {
         modifiers: [["darker", 0.2]],
       }}
       arcLinkLabelsSkipAngle={10}
-      arcLinkLabelsTextColor="#ffffff"
+      arcLinkLabelsTextColor={theme.palette.text.primary}
       arcLinkLabelsThickness={2}
       arcLinkLabelsColor={{ from: "color" }}
       arcLabelsSkipAngle={10}

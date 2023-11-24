@@ -7,11 +7,15 @@ import {
   getUserDetailsAPI,
   setUserDetailsAPI,
 } from "../../firebase/api";
-import { StylesConstant, UserRoleLevel } from "../../utils/constants";
+import {
+  DropdownOptions,
+  StylesConstant,
+  UserRoleLevel,
+} from "../../utils/constants";
 import toast from "react-hot-toast";
-import { Box, Button, Grid, TextField } from "@mui/material";
-
-type Props = {};
+import { Box, Button, Grid, SelectChangeEvent, TextField } from "@mui/material";
+import { LoadingSection } from "../Loading";
+import Dropdown from "../../components/Dropdown";
 
 const displayFieldsPersonal = [
   { title: "salary", label: "Current Salary" },
@@ -25,10 +29,16 @@ const displayFieldsPersonal = [
   { title: "workSkills", label: "Work Skills" },
 ];
 
+const formdataFields = ["maritialStatus"];
+
 export default function PersonalInfo({ uid }: { uid: string }) {
   const [basicInfoPersl, setBasicInfoPersl] = useState<UserInfoPersonal>();
+  const [isLoading, setIsLoading] = useState(true);
   const role = useSelector((state: RootState) => state.auth.user?.role);
 
+  const [formdata, setFormdata] = useState({
+    maritialStatus: "",
+  });
   useEffect(() => {
     //Fetch user detail
     const fetch = async () => {
@@ -37,9 +47,17 @@ export default function PersonalInfo({ uid }: { uid: string }) {
         uid as string
       )) as UserInfoPersonal;
       setBasicInfoPersl(infoPersonal);
+      setIsLoading(false);
     };
     fetch();
   }, []);
+
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    setFormdata({
+      ...formdata,
+      [event.target.name]: event.target.value,
+    } as any);
+  };
 
   const handleSubmitPersonal = (event: FormEvent<HTMLFormElement>) => {
     if (role === UserRoleLevel.EMPLOYEE) return;
@@ -56,8 +74,9 @@ export default function PersonalInfo({ uid }: { uid: string }) {
       manager: data.get("manager") as string,
       pfaAccount: data.get("pfaAccount") as string,
       currentAddress: data.get("currentAddress") as string,
-      maritialStatus: data.get("maritialStatus") as string,
+      maritialStatus: formdata?.maritialStatus,
       workSkills: data.get("workSkills") as string,
+      uid
     };
 
     if (userInfoPersl)
@@ -66,7 +85,9 @@ export default function PersonalInfo({ uid }: { uid: string }) {
       );
   };
 
-  return (
+  return isLoading ? (
+    <LoadingSection />
+  ) : (
     <Box
       component="form"
       noValidate
@@ -74,28 +95,51 @@ export default function PersonalInfo({ uid }: { uid: string }) {
       sx={{ m: 3 }}
     >
       <Grid container spacing={4}>
-        {displayFieldsPersonal.map((item, index) => (
-          <Grid item xs={12} key={index}>
-            <TextField
-              name={item.title}
-              fullWidth
-              id={item.title}
-              label={item.label}
-              value={
-                basicInfoPersl?.[item.title as keyof UserInfoPersonal] as string
-              }
-              disabled={role === UserRoleLevel.EMPLOYEE}
-              color="primary"
-              sx={StylesConstant.changeAutofillColor}
-            />
-          </Grid>
-        ))}
+        {displayFieldsPersonal.map((item, index) => {
+          if (formdataFields.includes(item.title))
+            return (
+              <Grid item xs={12} key={index}>
+                <Dropdown
+                  title={item.title}
+                  label={item.label}
+                  options={DropdownOptions[item.title]}
+                  initValue={
+                    basicInfoPersl?.[
+                      item.title as keyof UserInfoPersonal
+                    ] as string
+                  }
+                  onChange={handleChange}
+                />
+              </Grid>
+            );
+
+          return (
+            <Grid item xs={12} key={index}>
+              <TextField
+                name={item.title}
+                fullWidth
+                id={item.title}
+                label={item.label}
+                defaultValue={
+                  basicInfoPersl?.[
+                    item.title as keyof UserInfoPersonal
+                  ] as string
+                }
+                color="primary"
+                sx={StylesConstant.changeAutofillColor}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+          );
+        })}
       </Grid>
       <Button
         type="submit"
         variant="contained"
         sx={{ mt: 6, mb: 2, py: 1.5, px: 4.5 }}
-        disabled={role === UserRoleLevel.EMPLOYEE}
+        disabled={role !== UserRoleLevel.SUPER_ADMIN}
       >
         Save
       </Button>

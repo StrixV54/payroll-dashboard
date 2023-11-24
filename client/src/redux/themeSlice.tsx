@@ -1,12 +1,14 @@
 import { PaletteMode } from "@mui/material";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface ThemeState {
   mode: PaletteMode;
 }
 
+const cachedTheme = localStorage.getItem("zuco-thememode-cache");
+
 const initialState: ThemeState = {
-  mode: "dark",
+  mode: (cachedTheme as PaletteMode) || "light",
 };
 
 export const themeSlice = createSlice({

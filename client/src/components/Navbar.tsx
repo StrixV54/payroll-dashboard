@@ -9,14 +9,21 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { ColorConstant, StylesConstant } from "../utils/constants";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { changeMode } from "../redux/themeSlice";
 
 export default function Navbar() {
+  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
 
@@ -37,9 +44,10 @@ export default function Navbar() {
       position="fixed"
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        backgroundColor: ColorConstant.TEAL_BG,
+        backgroundColor: theme.palette.background.appbar,
         backgroundImage: "none",
         boxShadow: "none",
+        color: theme.palette.text.primary,
       }}
     >
       <Toolbar sx={{ height: "80px", justifyContent: "space-between" }}>
@@ -47,6 +55,19 @@ export default function Navbar() {
           ZUCO
         </Typography>
         <Box sx={StylesConstant.divCenterStyle}>
+          <IconButton
+            sx={{ mr: 2 }}
+            onClick={() => {
+              dispatch(changeMode());
+            }}
+            color="inherit"
+          >
+            {theme.palette.mode === "dark" ? (
+              <Brightness7Icon />
+            ) : (
+              <Brightness4Icon />
+            )}
+          </IconButton>
           <Box
             sx={{
               display: "flex",

@@ -64,8 +64,12 @@ export default function ViewProfile() {
   };
 
   return (
-    <>
-      <Typography variant="h5" sx={{ width: "100%", px: 4, py: 3 }}>
+    <Box sx={{ width: "100%" }}>
+      <Typography
+        variant="h5"
+        sx={{ width: "100%", px: 4, py: 3 }}
+        component={"p"}
+      >
         Profile Details
       </Typography>
       <Box
@@ -150,10 +154,14 @@ export default function ViewProfile() {
             fullWidth
           />
         </FormControl>
-        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ m: "auto", width: "100%", padding: "16px" }}
+        >
           Save
         </Button>
       </Box>
-    </>
+    </Box>
   );
 }

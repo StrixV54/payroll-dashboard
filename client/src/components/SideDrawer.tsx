@@ -9,6 +9,7 @@ import {
   ListItemText,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { ColorConstant, StylesConstant } from "../utils/constants";
 import { NavLink as ReactRouterLink } from "react-router-dom";
@@ -16,10 +17,11 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { RoleLevel } from "../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import themeSlice from "../redux/themeSlice";
 
 export const sidebarAccessLevelUser = (role: RoleLevel) => {
   switch (role) {
-    case "employee":
+    case "Employee":
       return [
         {
           section: "Data",
@@ -34,7 +36,7 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
           routeList: [{ title: "Job Details", route: "/jobdetails" }],
         },
       ];
-    case "payroll manager":
+    case "Payroll Manager":
       return [
         {
           section: "Data",
@@ -58,10 +60,29 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
           routeList: [{ title: "Job Details", route: "/jobdetails" }],
         },
       ];
+    case "Super Admin":
+      return [
+        {
+          section: "Data",
+          routeList: [
+            { title: "Users", route: "/users" },
+            { title: "Add User", route: "/adduser" },
+          ],
+        },
+        {
+          section: "Pages",
+          routeList: [{ title: "FAQs", route: "/faqs" }],
+        },
+        {
+          section: "Account",
+          routeList: [{ title: "Job Details", route: "/jobdetails" }],
+        },
+      ];
   }
 };
 
 export default function SideDrawer() {
+  const theme = useTheme();
   const role = useSelector(
     (state: RootState) => state.auth.user?.role
   ) as RoleLevel;
@@ -74,10 +95,10 @@ export default function SideDrawer() {
       sx={{
         width: 250,
         flexShrink: 0,
-        backgroundColor: ColorConstant.TEAL_BG,
+        backgroundColor: theme.palette.background.appbar,
         [`& .MuiDrawer-paper`]: {
           width: 250,
-          backgroundColor: ColorConstant.TEAL_BG,
+          backgroundColor: theme.palette.background.appbar,
           boxSizing: "border-box",
           borderRight: "none",
         },
@@ -90,7 +111,13 @@ export default function SideDrawer() {
             <ListItem key={text} disablePadding sx={{ mb: 1 }}>
               <ListItemButton
                 sx={{
-                  ...StylesConstant.drawerListItem,
+                  borderRadius: "8px",
+                  "&:hover": {
+                    bgcolor: theme.palette.background.sidebarHover,
+                  },
+                  "&.active": {
+                    bgcolor: theme.palette.background.sidebar,
+                  },
                 }}
                 component={ReactRouterLink}
                 to={"/" + text.toLowerCase()}
@@ -114,7 +141,15 @@ export default function SideDrawer() {
                 return (
                   <ListItem key={index} disablePadding sx={{ mb: 1 }}>
                     <ListItemButton
-                      sx={StylesConstant.drawerListItem}
+                      sx={{
+                        borderRadius: "8px",
+                        "&:hover": {
+                          bgcolor: theme.palette.background.sidebarHover,
+                        },
+                        "&.active": {
+                          bgcolor: theme.palette.background.sidebar,
+                        },
+                      }}
                       component={ReactRouterLink}
                       to={text.route.toLowerCase()}
                     >

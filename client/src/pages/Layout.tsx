@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { firebaseAuth } from "../firebase/config";
 import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "./Loading";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { collectionUser, getUserDetailsAPI } from "../firebase/api";
 import { useDispatch } from "react-redux";
 import { userIsAuthentic } from "../redux/authSlice";
@@ -11,6 +11,7 @@ import Navbar from "../components/Navbar";
 import { ColorConstant } from "../utils/constants";
 
 export default function HomeLayout() {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ export default function HomeLayout() {
         display: "flex",
         flexGrow: 1,
         height: "100vh",
-        backgroundColor: ColorConstant.TEAL_BG,
+        backgroundColor: theme.palette.background.appbar,
       }}
     >
       {/*  ------ Navbar ------ */}
@@ -52,9 +53,10 @@ export default function HomeLayout() {
         sx={{
           flexGrow: 1,
           mt: "80px",
+          mr: 2,
           padding: 3,
           borderRadius: 3,
-          backgroundColor: ColorConstant.BLACK,
+          backgroundColor: theme.palette.background.shade,
           overflow: "scroll",
           display: "flex",
         }}

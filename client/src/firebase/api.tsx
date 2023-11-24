@@ -7,7 +7,6 @@ import {
 import { firebaseAuth, firebaseGoogleAuth, firestoreDB } from "./config";
 import {
   QueryConstraint,
-  QueryFieldFilterConstraint,
   SnapshotOptions,
   collection,
   doc,
@@ -19,7 +18,14 @@ import {
 } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { printFirebaseError } from "../utils/helper";
-import { RoleLevel, UserInfoLogin, UserInfoPersonal } from "../utils/interface";
+import {
+  RoleLevel,
+  UserInfoFirebase,
+  UserInfoLogin,
+  UserInfoPersonal,
+} from "../utils/interface";
+import * as admin from "firebase-admin";
+import { DropdownOptions } from "../utils/constants";
 
 export const collectionUser = "users";
 const collectionIdGenerator = "uniqueIdGenerator";
@@ -34,6 +40,7 @@ export const signUpAPI = ({
   password,
   dateOfBirth,
   employeeId,
+  status,
 }: UserInfoLogin) => {
   return createUserWithEmailAndPassword(firebaseAuth, email, password)
     .then(async (res) => {
@@ -48,6 +55,7 @@ export const signUpAPI = ({
         uid: res.user?.uid,
         dateOfBirth,
         employeeId,
+        status,
         role: "employee" as RoleLevel, // ["employee", "payroll manager", "super admin"]
         lastLoginAt: new Date().toLocaleString(),
       });
@@ -77,18 +85,56 @@ export const signInAPI = (email: string, password: string) => {
       printFirebaseError(error);
     });
 };
-
-// get specific user detail using uid
-// export const getUserDetailAPI = async (uid: string) => {
-//   const docSnap = await getDoc(doc(firestoreDB, collectionUser, uid));
-//   // If Document Snapshot exist then return data
-//   if (docSnap.exists()) {
-//     return docSnap.data();
-//   } else {
-//     console.log("No such document exists!");
-//   }
-//   return undefined;
-// };
+export const createNewUserAPI = async ({
+  first,
+  last,
+  email,
+  password,
+  dateOfBirth,
+  role,
+  phoneNumber,
+  department,
+  grade,
+}: any) => {
+  const displayName = first?.concat(" ", last!);
+  console.log(email);
+  const res = await fetch("http://localhost:5000/api/createUserAPI", {
+    method: "POST",
+    body: JSON.stringify({
+      email,
+      password,
+      displayName,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (res.ok) {
+    const result = await res.json();
+    const uid = result?.uid;
+    const employeeId = await generateEmployeeIdAPI(first, last);
+    return await setDoc(doc(firestoreDB, collectionUser, uid), {
+      displayName,
+      email,
+      uid,
+      dateOfBirth,
+      employeeId,
+      department,
+      phoneNumber,
+      grade,
+      status: "active",
+      role, // ["employee", "payroll manager", "super admin"]
+      lastLoginAt: new Date().toLocaleString(),
+    });
+  } else {
+    throw new Error(
+      "Error in creating user in backend: " +
+        res.status +
+        " , " +
+        res.statusText
+    );
+  }
+};
 
 export const queryUserAPI = async (queryFilter: QueryConstraint) => {
   // creates a reference to the collection
@@ -164,7 +210,7 @@ export const generateEmployeeIdAPI = async (first: string, last: string) => {
   });
 
   return await (first.toUpperCase().at(0)! +
-    last.toUpperCase().at(1)! +
+    last.toUpperCase().at(0)! +
     id.toString());
 };
 
@@ -214,5 +260,109 @@ export const getUserSalaryAPI = async (
     // doc.data() is never undefined for query doc snapshots
     result.push(doc.data());
   });
+  return result;
+};
+
+export const queryUserDetailsAPI = async () => {
+  // creates a reference to the collection
+  const userRef = collection(firestoreDB, collectionUserDetails);
+  const querySnapshot = await getDocs(userRef);
+  let result: SnapshotOptions[] = [];
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    result.push(doc.data());
+  });
+  return result;
+};
+
+//employee vs department , data processing API
+export const employeeDepartmentAPI = async () => {
+  // creates a reference to the collection
+  const userRef = collection(firestoreDB, collectionUser);
+  const querySnapshot = await getDocs(userRef);
+  let userdata: UserInfoFirebase[] = [];
+  querySnapshot.forEach((doc) => {
+    userdata.push(doc.data() as UserInfoFirebase);
+  });
+  const result = [];
+  let totalEmployee = 0;
+  for (let department of DropdownOptions.department) {
+    let employeeList = userdata.filter(
+      (item) => item?.department === department.value
+    );
+    totalEmployee += employeeList.length;
+    result.unshift({
+      department: department.value,
+      employees: employeeList.length,
+    });
+  }
+  return { result, totalEmployee };
+};
+
+//salary vs department , data processing API
+export const salaryDepartmentAPI = async () => {
+  const userRef = collection(firestoreDB, collectionUser);
+  const userDetailRef = collection(firestoreDB, collectionUserDetails);
+  const querySnapshot = await getDocs(userRef);
+  const querySnapshotDetail = await getDocs(userDetailRef);
+  let userdata: UserInfoFirebase[] = [];
+  let userdetail: UserInfoPersonal[] = [];
+  querySnapshot.forEach((doc) => {
+    userdata.push(doc.data() as UserInfoFirebase);
+  });
+  querySnapshotDetail.forEach((doc) => {
+    userdetail.push(doc.data() as UserInfoPersonal);
+  });
+  const result = [];
+  let totalSalarySpentOverall = 0;
+  for (let department of DropdownOptions.department) {
+    let totalSalary = 0;
+    userdata.forEach((item) => {
+      if (item.department === department.value) {
+        userdetail.forEach((detail) => {
+          if (detail.uid === item.uid)
+            totalSalary += Number(detail.salary.replaceAll(",", ""));
+        });
+      }
+    });
+    totalSalarySpentOverall += totalSalary;
+    result.unshift({
+      department: department.value,
+      salary: totalSalary,
+    });
+  }
+  return { result, totalSalarySpentOverall };
+};
+
+//salary ranges , data processing API
+export const salaryRangeAPI = async () => {
+  const range = [
+    { upper: 5, lower: 0 },
+    { upper: 10, lower: 5 },
+    { upper: 15, lower: 10 },
+    { upper: 25, lower: 15 },
+    { upper: 50, lower: 25 },
+  ];
+  const userDetailRef = collection(firestoreDB, collectionUserDetails);
+  const querySnapshotDetail = await getDocs(userDetailRef);
+  let userdetail: UserInfoPersonal[] = [];
+  querySnapshotDetail.forEach((doc) => {
+    userdetail.push(doc.data() as UserInfoPersonal);
+  });
+  const result = [];
+  for (let data of range) {
+    let noOfEmployee = 0;
+    userdetail.forEach((item) => {
+      const salaryLPA = Number(item.salary.replaceAll(",", "")) / 100000;
+      if (salaryLPA >= data.lower && salaryLPA < data.upper) {
+        noOfEmployee += 1;
+      }
+    });
+    result.push({
+      id: data.lower + "-" + data.upper + " LPA",
+      label: data.lower + "-" + data.upper + " LPA",
+      value: noOfEmployee,
+    });
+  }
   return result;
 };

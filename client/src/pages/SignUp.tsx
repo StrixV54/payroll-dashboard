@@ -60,6 +60,7 @@ export default function SignUp() {
       first: data.get("firstName") as string,
       last: data.get("lastName") as string,
       dateOfBirth: dateofbirth!,
+      status: "new",
       employeeId: await generateEmployeeIdAPI(
         data.get("firstName") as string,
         data.get("lastName") as string

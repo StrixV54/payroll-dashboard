@@ -1,10 +1,3 @@
-<<<<<<< Updated upstream
-import { Box } from "@mui/material";
-import { ColorConstant, StylesConstant } from "../utils/constants";
-
-export default function Dashboard() {
-  return (
-=======
 import { Box, Button, Grid, Paper, Typography, useTheme } from "@mui/material";
 import {
   ColorConstant,
@@ -86,15 +79,11 @@ export default function Dashboard() {
   return isLoading ? (
     <LoadingSection />
   ) : (
->>>>>>> Stashed changes
     <Box
       sx={{
         ...StylesConstant.fullScreenCover,
       }}
     >
-<<<<<<< Updated upstream
-      Dashboard
-=======
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <Paper
@@ -291,7 +280,6 @@ export default function Dashboard() {
           </Paper>
         </Grid>
       </Grid>
->>>>>>> Stashed changes
     </Box>
   );
 }

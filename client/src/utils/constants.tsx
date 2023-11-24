@@ -1,10 +1,6 @@
-<<<<<<< Updated upstream
-export const StylesConstant = {
-=======
 import { RoleLevel } from "./interface";
 
 export const StylesConstant: { [key: string]: any } = {
->>>>>>> Stashed changes
   divCenterStyle: {
     display: "flex",
     justifyContent: "center",
@@ -32,8 +28,6 @@ export const StylesConstant: { [key: string]: any } = {
       bgcolor: "#0d4250",
     },
   },
-<<<<<<< Updated upstream
-=======
   gradientEffectDark: {
     "&:before": {
       content: '""',
@@ -114,7 +108,6 @@ export const UserRoleLevel = {
   EMPLOYEE: "Employee",
   PAYROLL_MANAGER: "Payroll Manager",
   SUPER_ADMIN: "Super Admin",
->>>>>>> Stashed changes
 };
 
 export const ColorConstant = {
@@ -133,17 +126,10 @@ export const ColorConstant = {
   LIGHT_SIDEBAR_HOVER_BG: "#a2ceda",
   // DEFAULTS
   BLACK: "#000000",
-<<<<<<< Updated upstream
-=======
-  LIGHT_GRAY: "#9d9d9d",
-  GRAY: "#636363",
->>>>>>> Stashed changes
   WHITE: "#ffffff",
   COOL_YELLOW: "#ffc007",
   COOL_GREEN: "#198d27",
 };
-<<<<<<< Updated upstream
-=======
 
 export const DropdownOptions: { [key: string]: any } = {
   grade: [
@@ -182,4 +168,3 @@ export const DropdownOptions: { [key: string]: any } = {
     { value: "Divorced", label: "Divorced" },
   ],
 };
->>>>>>> Stashed changes

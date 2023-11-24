@@ -5,11 +5,7 @@ import {
 } from "firebase/auth";
 import { firebaseAuth, firebaseGoogleAuth, firestoreDB } from "./config";
 import {
-<<<<<<< Updated upstream
-  QueryFieldFilterConstraint,
-=======
   QueryConstraint,
->>>>>>> Stashed changes
   SnapshotOptions,
   collection,
   doc,
@@ -21,9 +17,6 @@ import {
 } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { printFirebaseError } from "../utils/helper";
-<<<<<<< Updated upstream
-import { CleanHands } from "@mui/icons-material";
-=======
 import {
   RoleLevel,
   UserInfoFirebase,
@@ -32,18 +25,9 @@ import {
 } from "../utils/interface";
 import * as admin from "firebase-admin";
 import { DropdownOptions } from "../utils/constants";
->>>>>>> Stashed changes
 
 const collectionName = "users";
 
-<<<<<<< Updated upstream
-export const signUpAPI = (
-  fullName: string,
-  email: string,
-  password: string
-  // phoneNumber: string
-) => {
-=======
 export const signUpAPI = ({
   first,
   last,
@@ -53,7 +37,6 @@ export const signUpAPI = ({
   employeeId,
   status,
 }: UserInfoLogin) => {
->>>>>>> Stashed changes
   return createUserWithEmailAndPassword(firebaseAuth, email, password)
     .then(async (res) => {
       console.log("res", res);
@@ -65,14 +48,10 @@ export const signUpAPI = ({
         displayName: fullName,
         email: res.user?.email,
         uid: res.user?.uid,
-<<<<<<< Updated upstream
-        role: "user", // ["user", "admin", "super"]
-=======
         dateOfBirth,
         employeeId,
         status,
         role: "employee" as RoleLevel, // ["employee", "payroll manager", "super admin"]
->>>>>>> Stashed changes
         lastLoginAt: new Date().toLocaleString(),
       });
       return fullName;
@@ -105,18 +84,6 @@ export const signInAPI = (email: string, password: string) => {
     });
 };
 
-<<<<<<< Updated upstream
-// get specific user detail using uid
-export const getUserDetailAPI = async (uid: string) => {
-  const docSnap = await getDoc(doc(firestoreDB, collectionName, uid));
-  // If Document Snapshot exist then return data
-  if (docSnap.exists()) {
-    return docSnap.data();
-  } else {
-    console.log("No such document exists!");
-  }
-  return undefined;
-=======
 export const createNewUserAPI = async ({
   first,
   last,
@@ -166,7 +133,6 @@ export const createNewUserAPI = async ({
         res.statusText
     );
   }
->>>>>>> Stashed changes
 };
 
 export const queryUserAPI = async (queryFilter: QueryFieldFilterConstraint) => {
@@ -221,8 +187,6 @@ export const signInWithGoogleAPI = () => {
       printFirebaseError(error);
     });
 };
-<<<<<<< Updated upstream
-=======
 
 export const generateEmployeeIdAPI = async (first: string, last: string) => {
   /**
@@ -401,4 +365,3 @@ export const salaryRangeAPI = async () => {
   }
   return result;
 };
->>>>>>> Stashed changes

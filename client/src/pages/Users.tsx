@@ -33,7 +33,6 @@ export default function Users() {
     };
     fetch();
   }, []);
-
   const rows = usersInfo
     ?.filter(
       (item: UserInfoFirebase) =>

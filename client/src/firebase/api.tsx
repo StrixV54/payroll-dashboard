@@ -1,4 +1,5 @@
 import {
+  User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -26,7 +27,11 @@ import {
 import * as admin from "firebase-admin";
 import { DropdownOptions } from "../utils/constants";
 
-const collectionName = "users";
+export const collectionUser = "users";
+const collectionIdGenerator = "uniqueIdGenerator";
+const docIdGenerator = "randomId";
+export const collectionUserDetails = "usersDetails";
+export const collectionUserSalaryDetails = "usersSalaryDetails";
 
 export const signUpAPI = ({
   first,
@@ -39,14 +44,14 @@ export const signUpAPI = ({
 }: UserInfoLogin) => {
   return createUserWithEmailAndPassword(firebaseAuth, email, password)
     .then(async (res) => {
-      console.log("res", res);
+      // console.log("res", res);
       // phoneNumber,
       /**
        * creates a new document with user's uid adding following information passed next.
        * */
-      await setDoc(doc(firestoreDB, collectionName, res.user.uid), {
-        displayName: fullName,
-        email: res.user?.email,
+      await setDoc(doc(firestoreDB, collectionUser, res.user.uid), {
+        displayName: first?.concat(" ", last!),
+        email,
         uid: res.user?.uid,
         dateOfBirth,
         employeeId,
@@ -54,13 +59,11 @@ export const signUpAPI = ({
         role: "employee" as RoleLevel, // ["employee", "payroll manager", "super admin"]
         lastLoginAt: new Date().toLocaleString(),
       });
-      return fullName;
     })
-    .then((name) => {
-      toast.success("Successfully Created Account" + name);
+    .then(() => {
+      toast.success("Successfully Created Account");
     })
     .catch((error) => {
-      console.log(error);
       printFirebaseError(error);
     });
 };
@@ -71,10 +74,9 @@ export const signInAPI = (email: string, password: string) => {
    * */
   return signInWithEmailAndPassword(firebaseAuth, email, password)
     .then(async (res) => {
-      await updateDoc(doc(firestoreDB, collectionName, res.user.uid), {
+      await updateDoc(doc(firestoreDB, collectionUser, res.user.uid), {
         lastLoginAt: new Date().toLocaleString(),
       });
-      return await getDoc(doc(firestoreDB, collectionName, res.user.uid));
     })
     .then(() => {
       toast.success("Successfully Logged In");
@@ -83,7 +85,6 @@ export const signInAPI = (email: string, password: string) => {
       printFirebaseError(error);
     });
 };
-
 export const createNewUserAPI = async ({
   first,
   last,
@@ -135,9 +136,9 @@ export const createNewUserAPI = async ({
   }
 };
 
-export const queryUserAPI = async (queryFilter: QueryFieldFilterConstraint) => {
+export const queryUserAPI = async (queryFilter: QueryConstraint) => {
   // creates a reference to the collection
-  const userRef = collection(firestoreDB, collectionName);
+  const userRef = collection(firestoreDB, collectionUser);
 
   // passing a single where query to  the query function
   const q = query(userRef, queryFilter);
@@ -168,15 +169,15 @@ export const signInWithGoogleAPI = () => {
           new Date(user.metadata?.creationTime as string).getTime() >
         10000 // diff greater that 10 second change means not first time login
       )
-        return await updateDoc(doc(firestoreDB, collectionName, res.user.uid), {
+        return await updateDoc(doc(firestoreDB, collectionUser, res.user.uid), {
           lastLoginAt: new Date().toLocaleString(),
         });
 
-      return await setDoc(doc(firestoreDB, collectionName, user?.uid), {
+      return await setDoc(doc(firestoreDB, collectionUser, user?.uid), {
         displayName: user.displayName,
         email: res.user.email,
         uid: res.user.uid,
-        role: "user", // ["user", "admin", "super"]
+        role: "employee" as RoleLevel, // ["employee", "payroll manager", "super admin"]
         lastLoginAt: new Date().toLocaleString(),
       });
     })

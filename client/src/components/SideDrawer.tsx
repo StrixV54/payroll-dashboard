@@ -11,10 +11,9 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { StylesConstant } from "../utils/constants";
+import { ColorConstant, StylesConstant } from "../utils/constants";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import { it } from "node:test";
 import { RoleLevel } from "../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -26,19 +25,15 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
       return [
         {
           section: "Data",
-          routeList: [
-            { title: "Department", route: "/department" },
-            { title: "Teams", route: "/teams" },
-            { title: "Users", route: "/users" },
-          ],
+          routeList: [{ title: "Users", route: "/users" }],
         },
         {
           section: "Pages",
-          routeList: [
-            { title: "Charts", route: "/charts" },
-            { title: "Calender", route: "/calender" },
-            { title: "FAQs", route: "/faqs" },
-          ],
+          routeList: [{ title: "FAQs", route: "/faqs" }],
+        },
+        {
+          section: "Account",
+          routeList: [{ title: "Job Details", route: "/jobdetails" }],
         },
       ];
     case "Payroll Manager":
@@ -59,6 +54,10 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
             { title: "Calender", route: "/calender" },
             { title: "FAQs", route: "/faqs" },
           ],
+        },
+        {
+          section: "Account",
+          routeList: [{ title: "Job Details", route: "/jobdetails" }],
         },
       ];
     case "Super Admin":
@@ -88,6 +87,7 @@ export default function SideDrawer() {
     (state: RootState) => state.auth.user?.role
   ) as RoleLevel;
 
+  // console.log(role);
   return (
     <Drawer
       variant="permanent"
@@ -100,11 +100,12 @@ export default function SideDrawer() {
           width: 250,
           backgroundColor: theme.palette.background.appbar,
           boxSizing: "border-box",
+          borderRight: "none",
         },
       }}
     >
-      <Toolbar sx={{ height: "100px" }} />
-      <Box sx={{ overflow: "auto", paddingX: "16px" }}>
+      <Toolbar sx={{ height: "80px" }} />
+      <Box sx={{ overflow: "auto", paddingX: "16px", borderRight: "none" }}>
         <List>
           {["Dashboard"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ mb: 1 }}>
@@ -130,7 +131,7 @@ export default function SideDrawer() {
           ))}
         </List>
         <Divider />
-        {sidebarAccessLevelUser(role)!.map((item, index) => {
+        {sidebarAccessLevelUser(role)?.map((item, index) => {
           return (
             <List key={index}>
               <Typography component="div" variant="overline" gutterBottom>

@@ -12,29 +12,39 @@ import {
 } from "@mui/material";
 import { FormEvent, useEffect, useState } from "react";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
-import { signInWithGoogleAPI, signUpAPI } from "../firebase/api";
+import {
+  generateEmployeeIdAPI,
+  signInWithGoogleAPI,
+  signUpAPI,
+} from "../firebase/api";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
 import { StylesConstant } from "../utils/constants";
 import { FcGoogle } from "react-icons/fc";
 import { UserInfoLogin } from "../utils/interface";
+import { firebaseAuth } from "../firebase/config";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [dateofbirth, setDateofbirth] = useState<string | null>();
 
   // const authState = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // //checks current state of auth locally
-    // firebaseAuth.onAuthStateChanged((user) => {
-    //   if (user) navigate("/");
-    //   //just to persist loading effect for sometime
-    // setTimeout(() => setIsLoading(false), 500);
-    // });
-    //just to persist loading effect for sometime
-    setTimeout(() => setIsLoading(false), 500);
+    //checks current state of auth locally
+    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+      if (user) navigate("/");
+
+      //just to persist loading effect for sometime
+      setTimeout(() => setIsLoading(false), 500);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -43,6 +53,7 @@ export default function SignUp() {
     setIsLoading(true);
     // get all input fields data with FormData function
     const data = new FormData(event.currentTarget);
+
     const userInfo: UserInfoLogin = {
       email: data.get("email") as string,
       password: data.get("password") as string,
@@ -55,14 +66,10 @@ export default function SignUp() {
         data.get("lastName") as string
       ),
     };
+
     // navigate("/fill-info", { state: userInfo });
-    signUpAPI(
-      userInfo.first!.concat(userInfo.last!),
-      userInfo.email,
-      userInfo.password
-      // userInfo.phoneNumber!
-    )
-      .then(() => navigate("/signin"))
+    signUpAPI(userInfo)
+      // .then(() => navigate("/signin"))
       .finally(() => {
         setIsLoading(false);
       });
@@ -75,6 +82,16 @@ export default function SignUp() {
       setIsLoading(false);
       // firebaseAuth.signOut();
     });
+  };
+
+  const handleDOBPicker = (newValue: any) => {
+    const dob =
+      (newValue.$M + 1).toString().padStart(2, "0") +
+      "/" +
+      newValue.$D.toString().padStart(2, "0") +
+      "/" +
+      newValue.$y;
+    setDateofbirth(dob);
   };
 
   // const handleOTP = (newValue: string) => {
@@ -170,6 +187,15 @@ export default function SignUp() {
                 autoComplete="new-password"
                 sx={StylesConstant.changeAutofillColor}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Date Of Birth*"
+                  sx={{ width: "100%" }}
+                  onChange={handleDOBPicker}
+                />
+              </LocalizationProvider>
             </Grid>
             <Grid item xs={12} mt={3}>
               <FormControlLabel

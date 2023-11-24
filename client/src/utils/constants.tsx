@@ -22,7 +22,7 @@ export const StylesConstant: { [key: string]: any } = {
   drawerListItem: {
     borderRadius: "8px",
     "&:hover": {
-      bgcolor: "#303030",
+      bgcolor: "#0b2b34",
     },
     "&.active": {
       bgcolor: "#0d4250",
@@ -126,6 +126,7 @@ export const ColorConstant = {
   LIGHT_SIDEBAR_HOVER_BG: "#a2ceda",
   // DEFAULTS
   BLACK: "#000000",
+  GRAY: "#636363",
   WHITE: "#ffffff",
   COOL_YELLOW: "#ffc007",
   COOL_GREEN: "#198d27",

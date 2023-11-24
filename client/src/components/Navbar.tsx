@@ -1,5 +1,6 @@
 import { MouseEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ProfilePicture from "../assets/profilePict.jpg";
 import {
   AppBar,
   Box,
@@ -24,8 +25,6 @@ export default function Navbar() {
   const mode = useSelector((state: RootState) => state.theme.mode);
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
-  // const { toggleColorMode } = useContext(ColorModeContext);
-  // const auth = getAuth();
   const navigate = useNavigate();
 
   const handleMenu = (event: MouseEvent<HTMLElement>) => {
@@ -52,20 +51,9 @@ export default function Navbar() {
       }}
     >
       <Toolbar sx={{ height: "80px", justifyContent: "space-between" }}>
-        <Typography variant="h6" component="h6" fontWeight="bold" mr={4}>
+        <Typography component="h6" fontWeight="bold" mr={4} fontSize={"1.4rem"}>
           ZUCO
         </Typography>
-        {/* <div style={{ flexGrow: 1 }}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </div> */}
         <Box sx={StylesConstant.divCenterStyle}>
           <IconButton
             sx={{ mr: 2 }}
@@ -108,33 +96,51 @@ export default function Navbar() {
             </Typography>
           </Box>
           <IconButton
-            size="large"
             aria-label="current user account"
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleMenu}
             color="inherit"
+            sx={{ p: 0, ml: 1 }}
           >
-            <AccountCircle />
+            <img
+              alt="profile-pic"
+              src={ProfilePicture}
+              style={{
+                height: "2.5rem",
+                width: "2.5rem",
+                backgroundColor: "#138058",
+                backgroundSize: "auto",
+                backgroundRepeat: "no-repeat",
+                borderRadius: "50%",
+              }}
+            />
+            {/* <AccountCircle sx={{ fontSize: "2s.2rem" }} /> */}
           </IconButton>
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: "top",
+              vertical: "bottom",
               horizontal: "right",
             }}
             keepMounted
             transformOrigin={{
-              vertical: "top",
+              vertical: -8,
               horizontal: "right",
             }}
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={signOutHandle}>Sign Out</MenuItem>
+            <MenuItem
+              onClick={() => navigate("/viewprofile")}
+              sx={{ padding: "10px 20px" }}
+            >
+              View Profile
+            </MenuItem>
+            <MenuItem onClick={signOutHandle} sx={{ padding: "10px 20px" }}>
+              Sign Out
+            </MenuItem>
           </Menu>
         </Box>
       </Toolbar>

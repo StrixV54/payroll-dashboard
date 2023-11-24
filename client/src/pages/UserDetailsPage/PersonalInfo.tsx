@@ -39,7 +39,6 @@ export default function PersonalInfo({ uid }: { uid: string }) {
   const [formdata, setFormdata] = useState({
     maritialStatus: "",
   });
-
   useEffect(() => {
     //Fetch user detail
     const fetch = async () => {

@@ -1,4 +1,8 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import {
   CssBaseline,
@@ -33,6 +37,18 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("zuco-thememode-cache", mode);
   }, [mode]);
+  
+  const role: RoleLevel = useSelector(
+    (state: RootState) => state.auth.user?.role as RoleLevel
+  ) || localStorage.getItem("roleLevel");
+  console.log(role);
+  // Update the theme only if the mode changes
+  const theme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
+
+  const router = useMemo(
+    () => createBrowserRouter(RouteProviderPlain(role)),
+    [role]
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -43,6 +59,8 @@ export default function App() {
       {/* <BrowserRouter> */}
       {/* Dynamically assigning routes according to access level */}
       {/* {<RouteProvider role={role} />} */}
+        {/* Dynamically assigning routes according to access level */}
+        {/* {<RouteProvider role={role} />} */}
       {/* </BrowserRouter> */}
 
       <RouterProvider router={router} />

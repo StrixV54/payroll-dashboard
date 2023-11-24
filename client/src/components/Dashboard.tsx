@@ -82,6 +82,8 @@ export default function Dashboard() {
     <Box
       sx={{
         ...StylesConstant.fullScreenCover,
+        flexGrow: 1,
+        display: "flex",
       }}
     >
       <Grid container spacing={3}>

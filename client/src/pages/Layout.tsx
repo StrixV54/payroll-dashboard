@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { userIsAuthentic } from "../redux/authSlice";
 import SideDrawer from "../components/SideDrawer";
 import Navbar from "../components/Navbar";
+import { ColorConstant } from "../utils/constants";
 
 export default function HomeLayout() {
   const theme = useTheme();
@@ -16,18 +17,16 @@ export default function HomeLayout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
       if (!user) {
         navigate("/signin");
         return;
       }
-      const checkUser = async () => {
-        //Fetch user detail
-        const userInfo = await getUserDetailAPI(user.uid);
-        dispatch(userIsAuthentic(userInfo as object));
-        setIsLoading(false);
-      };
-      checkUser();
+      //Fetch user detail
+      const userInfo = await getUserDetailsAPI(collectionUser, user.uid);
+      localStorage.setItem("roleLevel", userInfo?.role);
+      dispatch(userIsAuthentic(userInfo as object));
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -53,7 +52,6 @@ export default function HomeLayout() {
         component="main"
         sx={{
           flexGrow: 1,
-          // height: "calc(100vh - 80px)",
           mt: "80px",
           mr: 2,
           padding: 3,

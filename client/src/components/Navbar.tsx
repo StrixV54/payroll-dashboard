@@ -13,14 +13,10 @@ import {
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-<<<<<<< Updated upstream
-import { StylesConstant } from "../utils/constants";
-=======
 import { ColorConstant, StylesConstant } from "../utils/constants";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { changeMode } from "../redux/themeSlice";
->>>>>>> Stashed changes
 
 export default function Navbar() {
   const theme = useTheme();
@@ -47,9 +43,6 @@ export default function Navbar() {
   return (
     <AppBar
       position="fixed"
-<<<<<<< Updated upstream
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-=======
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
         backgroundColor: theme.palette.background.appbar,
@@ -57,7 +50,6 @@ export default function Navbar() {
         boxShadow: "none",
         color: theme.palette.text.primary,
       }}
->>>>>>> Stashed changes
     >
       <Toolbar sx={{ height: "80px", justifyContent: "space-between" }}>
         <Typography variant="h6" component="h6" fontWeight="bold" mr={4}>
@@ -75,11 +67,6 @@ export default function Navbar() {
             </IconButton>
           </div> */}
         <Box sx={StylesConstant.divCenterStyle}>
-<<<<<<< Updated upstream
-          <Typography variant="body2">
-            {user?.displayName} : {user?.role}
-          </Typography>
-=======
           <IconButton
             sx={{ mr: 2 }}
             onClick={() => {
@@ -120,7 +107,6 @@ export default function Navbar() {
               {user?.role}
             </Typography>
           </Box>
->>>>>>> Stashed changes
           <IconButton
             size="large"
             aria-label="current user account"

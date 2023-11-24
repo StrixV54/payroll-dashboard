@@ -22,11 +22,7 @@ import themeSlice from "../redux/themeSlice";
 
 export const sidebarAccessLevelUser = (role: RoleLevel) => {
   switch (role) {
-<<<<<<< Updated upstream
-    case "user":
-=======
     case "Employee":
->>>>>>> Stashed changes
       return [
         {
           section: "Data",
@@ -45,11 +41,7 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
           ],
         },
       ];
-<<<<<<< Updated upstream
-    case "admin":
-=======
     case "Payroll Manager":
->>>>>>> Stashed changes
       return [
         {
           section: "Data",
@@ -91,14 +83,10 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
 };
 
 export default function SideDrawer() {
-<<<<<<< Updated upstream
-  const role = useSelector((state: RootState) => state.auth.user?.role) as RoleLevel;
-=======
   const theme = useTheme();
   const role = useSelector(
     (state: RootState) => state.auth.user?.role
   ) as RoleLevel;
->>>>>>> Stashed changes
 
   return (
     <Drawer
@@ -107,15 +95,10 @@ export default function SideDrawer() {
       sx={{
         width: 250,
         flexShrink: 0,
-<<<<<<< Updated upstream
-        [`& .MuiDrawer-paper`]: {
-          width: 250,
-=======
         backgroundColor: theme.palette.background.appbar,
         [`& .MuiDrawer-paper`]: {
           width: 250,
           backgroundColor: theme.palette.background.appbar,
->>>>>>> Stashed changes
           boxSizing: "border-box",
         },
       }}

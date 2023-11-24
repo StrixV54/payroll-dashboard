@@ -2,13 +2,8 @@ import { useEffect, useState } from "react";
 import { firebaseAuth } from "../firebase/config";
 import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "./Loading";
-<<<<<<< Updated upstream
-import { Box } from "@mui/material";
-import { getUserDetailAPI } from "../firebase/api";
-=======
 import { Box, useTheme } from "@mui/material";
 import { collectionUser, getUserDetailsAPI } from "../firebase/api";
->>>>>>> Stashed changes
 import { useDispatch } from "react-redux";
 import { userIsAuthentic } from "../redux/authSlice";
 import SideDrawer from "../components/SideDrawer";
@@ -41,9 +36,6 @@ export default function HomeLayout() {
   return isLoading ? (
     <Loading message="Checking Login !!" />
   ) : (
-<<<<<<< Updated upstream
-    <Box sx={{ display: "flex", flexGrow: 1 }}>
-=======
     <Box
       sx={{
         display: "flex",
@@ -52,7 +44,6 @@ export default function HomeLayout() {
         backgroundColor: theme.palette.background.appbar,
       }}
     >
->>>>>>> Stashed changes
       {/*  ------ Navbar ------ */}
       <Navbar />
       {/*  ------ SideBar ------ */}
@@ -64,15 +55,12 @@ export default function HomeLayout() {
           flexGrow: 1,
           // height: "calc(100vh - 80px)",
           mt: "80px",
-<<<<<<< Updated upstream
-=======
           mr: 2,
           padding: 3,
           borderRadius: 3,
           backgroundColor: theme.palette.background.shade,
           overflow: "scroll",
           display: "flex",
->>>>>>> Stashed changes
         }}
       >
         <Outlet />

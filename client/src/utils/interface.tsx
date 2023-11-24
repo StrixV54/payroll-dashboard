@@ -10,8 +10,6 @@ export interface UserInfoLogin {
   first?: string;
   last?: string;
   phoneNumber?: string;
-<<<<<<< Updated upstream
-=======
   dateOfBirth?: string;
   employeeId?: string;
   grade?: string;
@@ -53,7 +51,6 @@ export interface UserInfoSalary {
   month: string;
   year: string;
   employeeId: string;
->>>>>>> Stashed changes
 }
 
 export interface UserInterface {
@@ -64,8 +61,5 @@ export interface UserInterface {
   email: string;
 }
 
-<<<<<<< Updated upstream
-export type RoleLevel = "user" | "admin" | "super";
-=======
 export type RoleLevel = "Employee" | "Payroll Manager" | "Super Admin";
->>>>>>> Stashed changes
+

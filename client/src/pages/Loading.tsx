@@ -27,12 +27,12 @@ export function LoadingSection({ message }: { message?: string }) {
       sx={{
         ...StylesConstant.divCenterStyle,
         flexDirection: "column",
-        height: "50vh",
-        width: "50vw",
+        height: "100%",
+        width: "100%",
       }}
     >
       <RotateLoader color="#36d7b7" size={20} />
-      <Typography variant="h6" mt={10}>
+      <Typography variant="h6" mt={10} fontWeight={"light"}>
         {message || ""}
       </Typography>
     </Box>

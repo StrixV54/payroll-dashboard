@@ -89,7 +89,7 @@ export default function Dashboard() {
   }, []);
 
   return isLoading ? (
-    <LoadingSection />
+    <LoadingSection message="Loading... Please wait" />
   ) : (
     <Box
       sx={{

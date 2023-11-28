@@ -16,7 +16,8 @@ export default function SignOut() {
   useEffect(() => {
     //checks current state of auth locally
     if (isUserAuthentic) {
-      localStorage.removeItem("roleLevel");
+      localStorage.removeItem("zuco-rolelevel-cache");
+      localStorage.removeItem("zuco-thememode-cache");
       dispatch(resetAuth());
       firebaseAuth.signOut();
     }

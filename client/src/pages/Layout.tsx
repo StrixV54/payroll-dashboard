@@ -24,7 +24,7 @@ export default function HomeLayout() {
       }
       //Fetch user detail
       const userInfo = await getUserDetailsAPI(collectionUser, user.uid);
-      localStorage.setItem("roleLevel", userInfo?.role);
+      localStorage.setItem("zuco-rolelevel-cache", userInfo?.role);
       dispatch(userIsAuthentic(userInfo as object));
       setIsLoading(false);
     });

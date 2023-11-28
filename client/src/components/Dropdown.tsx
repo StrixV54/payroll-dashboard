@@ -21,7 +21,6 @@ export default function Dropdown({
   onChange?: (event: SelectChangeEvent) => void;
   options: Array<ItemProps>;
 }) {
-
   return (
     <FormControl fullWidth>
       <InputLabel id={title}>{label}</InputLabel>

@@ -1,5 +1,6 @@
 import { useTheme } from "@mui/material";
-import { BarDatum, ResponsiveBar } from "@nivo/bar";
+import { BarDatum, BarTooltipProps, ResponsiveBar } from "@nivo/bar";
+import { labelTooltip } from "../../utils/constants";
 
 export default function GraphBar({
   data,
@@ -64,18 +65,24 @@ export default function GraphBar({
   );
 }
 
+type groupMode = "grouped" | "stacked";
+
 export function GraphBarWithLabel({
   data,
   keys,
   xaxis,
   yaxis,
   indexBy,
+  mode = "stacked",
+  enableLabel = true,
 }: {
   data: Array<object>;
   keys: Array<string>;
   xaxis: string;
   yaxis: string;
   indexBy: string;
+  mode?: groupMode;
+  enableLabel?: boolean;
 }) {
   const theme = useTheme();
 
@@ -86,10 +93,11 @@ export function GraphBarWithLabel({
         textColor: theme.palette.text.primary,
       }}
       keys={keys}
+      tooltip={labelTooltip}
       indexBy={indexBy}
       margin={{ top: 50, right: 120, bottom: 50, left: 80 }}
       padding={0.3}
-      groupMode="stacked"
+      groupMode={mode}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
       colors={{ scheme: "paired" }}
@@ -111,14 +119,14 @@ export function GraphBarWithLabel({
         legendPosition: "middle",
         legendOffset: -60,
       }}
-      isInteractive={false}
-      enableLabel={true}
+      isInteractive={true}
+      enableLabel={enableLabel}
       labelSkipWidth={12}
       labelSkipHeight={12}
-      labelTextColor={{
-        from: "color",
-        modifiers: [["darker", 1.6]],
-      }}
+      // labelTextColor={{
+      //   from: "color",
+      //   modifiers: [["darker", 1.6]],
+      // }}
       legends={[
         {
           dataFrom: "keys",

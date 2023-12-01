@@ -1,3 +1,4 @@
+import { BarDatum, BarTooltipProps } from "@nivo/bar";
 import { RoleLevel } from "./interface";
 
 export const StylesConstant: { [key: string]: any } = {
@@ -182,4 +183,71 @@ export const DropdownOptions: { [key: string]: any } = {
     { value: "November", label: "November" },
     { value: "December", label: "December" },
   ],
+  monthDurationRange: [
+    { value: 1, label: "Last Month" },
+    { value: 3, label: "Last 3 Month" },
+    { value: 6, label: "Last 6 Month" },
+    { value: 12, label: "For a Year" },
+  ]
+};
+
+export const lineDataYear = [
+  {
+    id: "norway",
+    color: "hsl(332, 70%, 50%)",
+    data: [
+      {
+        x: "plane",
+        y: 278,
+      },
+      {
+        x: "helicopter",
+        y: 139,
+      },
+      {
+        x: "boat",
+        y: 229,
+      },
+      {
+        x: "train",
+        y: 149,
+      },
+      {
+        x: "subway",
+        y: 210,
+      },
+      {
+        x: "bicycle",
+        y: 286,
+      },
+      {
+        x: "horse",
+        y: 253,
+      },
+      {
+        x: "skateboard",
+        y: 65,
+      },
+      {
+        x: "others",
+        y: 260,
+      },
+    ],
+  },
+];
+
+export const labelTooltip = (prop: BarTooltipProps<BarDatum>) => {
+  return (
+    <div
+      style={{
+        background: "#202020",
+        padding: "5px 10px",
+        fontSize: "0.8rem",
+        color: "#fff",
+        borderRadius: "5px",
+      }}
+    >
+      {prop.label + " : " + prop.value}
+    </div>
+  );
 };

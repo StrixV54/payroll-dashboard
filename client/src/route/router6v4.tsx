@@ -1,5 +1,5 @@
 import { RoleLevel } from "../utils/interface";
-import Dashboard from "../components/Dashboard";
+import Dashboard from "../components/dashboard/Dashboard";
 import Department from "../components/Department";
 import { Navigate } from "react-router-dom";
 import Layout from "../pages/Layout";

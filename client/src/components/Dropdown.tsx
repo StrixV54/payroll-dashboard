@@ -14,15 +14,17 @@ export default function Dropdown({
   options,
   initValue,
   onChange,
+  fullWidth = true,
 }: {
   title: string;
   label: string;
   initValue?: string;
   onChange?: (event: SelectChangeEvent) => void;
   options: Array<ItemProps>;
+  fullWidth?: boolean;
 }) {
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth={fullWidth}>
       <InputLabel id={title}>{label}</InputLabel>
       <Select
         labelId={title}

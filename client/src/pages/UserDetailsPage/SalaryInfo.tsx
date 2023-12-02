@@ -29,6 +29,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -66,6 +67,10 @@ export default function SalaryInfo({ uid }: { uid: string }) {
     year: date.getFullYear().toString(),
     month: date.toLocaleString("default", { month: "long" }),
   });
+  const [viewPayslipMonthYear, setViewPayslipMonthYear] = useState({
+    year: date.getFullYear().toString(),
+    month: date.toLocaleString("default", { month: "long" }),
+  });
 
   useEffect(() => {
     //Fetch user detail
@@ -94,17 +99,13 @@ export default function SalaryInfo({ uid }: { uid: string }) {
     return false;
   };
 
-  const handlePayslipView: (value: Dayjs | null) => void = async (
-    eventValue
-  ) => {
-    const infoSalary = await getUserSalarySpecificMonthAPI(
-      collectionUserSalaryDetails,
-      monthIntToLongFormat(eventValue?.month()!),
-      eventValue?.year().toString()!,
-      uid
-    );
-    setBasicInfoSalaryMonth(infoSalary as UserInfoSalary);
-  };
+  const salaryList = basicInfoSalary?.map((item) => {
+    return {
+      label: item.month + " - " + item.year,
+      month: item.month,
+      year: item.year,
+    };
+  });
 
   const handleSubmitSalary = (event: FormEvent<HTMLFormElement>) => {
     if (role === UserRoleLevel.EMPLOYEE) return;
@@ -212,14 +213,23 @@ export default function SalaryInfo({ uid }: { uid: string }) {
           </Typography>
           <Divider sx={{ mb: 4, backgroundColor: "#3d3d3d" }} />
         </Box>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Choose Month-Year"
-            views={["year", "month"]}
-            onAccept={handlePayslipView}
-            disableFuture
-          />
-        </LocalizationProvider>
+        <Autocomplete
+          onChange={(event, value) => {
+            setViewPayslipMonthYear({
+              month: value?.month!,
+              year: value?.year!,
+            });
+            const list = basicInfoSalary?.filter(
+              (item) => item.month === value?.month && item.year === value?.year
+            );
+            setBasicInfoSalaryMonth(list?.at(0));
+          }}
+          options={salaryList!}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Salary Slip" />
+          )}
+        />
       </Box>
       {basicInfoSalaryMonth ? (
         <Card
@@ -228,10 +238,13 @@ export default function SalaryInfo({ uid }: { uid: string }) {
         >
           <CardContent>
             <Typography sx={{ fontSize: 18 }} component="div" gutterBottom>
-              Month: {basicInfoSalaryMonth?.month} , Year:{" "}
+              Month: {basicInfoSalaryMonth?.month} , Year:
               {basicInfoSalaryMonth?.year}
             </Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary">
+            <Typography
+              sx={{ fontSize: 14, lineHeight: "2rem" }}
+              color="text.secondary"
+            >
               Employee Id: {basicInfoSalaryMonth?.employeeId} <br />
               Total Salary : {basicInfoSalaryMonth?.totalSalary} <br />
               Basic Salary: {basicInfoSalaryMonth?.basicSalary} <br />

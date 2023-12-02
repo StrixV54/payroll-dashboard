@@ -436,7 +436,7 @@ export const getAllPayMonthRecordAPI = async (uid: string) => {
   // creates a reference to the collection
   const userRef = collection(firestoreDB, collectionUserSalaryDetails);
   const q = query(userRef, where("uid", "==", uid));
-  const querySnapshot = await getDocs(userRef);
+  const querySnapshot = await getDocs(q);
   let result: SnapshotOptions[] = [];
   querySnapshot.forEach((doc) => {
     result.push(doc.data());
@@ -527,9 +527,12 @@ export const salaryBifurcationLastMonthsAPI = async (
   let range =
     monthRange.length === 1
       ? monthRange.at(0)?.month! + " " + monthRange.at(0)?.year!
-      : monthRange.at(0)?.month! + " " +
-        monthRange.at(0)?.year! + " - " +
-        monthRange.at(monthRange.length - 1)?.month! + " " +
+      : monthRange.at(0)?.month! +
+        " " +
+        monthRange.at(0)?.year! +
+        " - " +
+        monthRange.at(monthRange.length - 1)?.month! +
+        " " +
         monthRange.at(monthRange.length - 1)?.year!;
 
   for (let data of monthRange) {

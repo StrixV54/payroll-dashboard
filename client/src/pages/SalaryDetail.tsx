@@ -1,5 +1,4 @@
 import {
-  FormEvent,
   Fragment,
   MutableRefObject,
   useEffect,
@@ -11,19 +10,13 @@ import { UserInfoFirebase, UserInfoSalary } from "../utils/interface";
 import { RootState } from "../redux/store";
 import {
   collectionUser,
-  collectionUserSalaryDetails,
   getAllPayMonthRecordAPI,
   getUserDetailsAPI,
-  setUserSalaryAPI,
 } from "../firebase/api";
-import { UserRoleLevel } from "../utils/constants";
-import toast from "react-hot-toast";
 import {
   Autocomplete,
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
   Divider,
   TextField,
@@ -34,11 +27,11 @@ export default function SalaryDetail() {
   const [basicInfoSalary, setBasicInfoSalary] = useState<UserInfoSalary[]>();
   const [basicInfoSalaryMonth, setBasicInfoSalaryMonth] =
     useState<UserInfoSalary>();
-  const role = useSelector((state: RootState) => state.auth.user?.role);
   const uid = useSelector((state: RootState) => state.auth.user?.uid);
   const employeeId: MutableRefObject<string | null> = useRef(null);
   const department: MutableRefObject<string | null> = useRef(null);
   const date = new Date();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [viewPayslipMonthYear, setViewPayslipMonthYear] = useState({
     year: date.getFullYear().toString(),
     month: date.toLocaleString("default", { month: "long" }),
@@ -57,6 +50,7 @@ export default function SalaryDetail() {
       department.current = infoUser?.department;
     };
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const salaryList = basicInfoSalary?.map((item) => {

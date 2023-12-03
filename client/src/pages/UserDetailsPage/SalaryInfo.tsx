@@ -14,12 +14,9 @@ import {
   collectionUserSalaryDetails,
   getAllPayMonthRecordAPI,
   getUserDetailsAPI,
-  getUserSalarySpecificMonthAPI,
-  getUserSalarySpecificYearAPI,
   setUserSalaryAPI,
 } from "../../firebase/api";
 import {
-  ColorConstant,
   StylesConstant,
   UserRoleLevel,
 } from "../../utils/constants";
@@ -35,13 +32,11 @@ import {
   Card,
   CardActions,
   CardContent,
-  Chip,
   Divider,
   Grid,
   TextField,
   Typography,
 } from "@mui/material";
-import { orderBy } from "firebase/firestore";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -67,6 +62,7 @@ export default function SalaryInfo({ uid }: { uid: string }) {
     year: date.getFullYear().toString(),
     month: date.toLocaleString("default", { month: "long" }),
   });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [viewPayslipMonthYear, setViewPayslipMonthYear] = useState({
     year: date.getFullYear().toString(),
     month: date.toLocaleString("default", { month: "long" }),
@@ -85,6 +81,7 @@ export default function SalaryInfo({ uid }: { uid: string }) {
       department.current = infoUser?.department;
     };
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isDisabledMonth = (date: Dayjs) => {

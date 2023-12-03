@@ -19,7 +19,6 @@ import {
 import toast from "react-hot-toast";
 import {
   getLastMonths,
-  monthIntToLongFormat,
   monthNames,
   printFirebaseError,
 } from "../utils/helper";

@@ -1,5 +1,9 @@
 import { Box, Grid, Paper, Typography, useTheme } from "@mui/material";
-import { ColorConstant, StylesConstant, lineDataYear } from "../../utils/constants";
+import {
+  ColorConstant,
+  StylesConstant,
+  lineDataYear,
+} from "../../utils/constants";
 import GraphBar from "../charts/GraphBar";
 import PieChart from "../charts/PieChart";
 import { useEffect, useState } from "react";
@@ -222,6 +226,9 @@ export default function Admin() {
               backgroundImage: "none",
             }}
           >
+            <Typography fontSize="1.2rem">
+              Salary Spent for Year 2023
+            </Typography>
             <Box height={300}>
               <GraphBar
                 data={barGraphSalaryDeptData}

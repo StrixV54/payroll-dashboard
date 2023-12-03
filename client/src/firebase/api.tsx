@@ -448,7 +448,6 @@ export const salaryAnalyticsEmployeeYearAPI = async (
   const salaryDetailRef = collection(firestoreDB, collectionUserSalaryDetails);
   const result = [];
   for (let month of monthNames) {
-    let ans = { month };
     const q = query(
       salaryDetailRef,
       where("uid", "==", uid),
@@ -476,31 +475,6 @@ export const salaryAnalyticsEmployeeYearAPI = async (
 };
 
 //Salary Analytics month wise for an employee , data processing API
-export const salaryBifurcationLastMonthAPI = async (uid: string) => {
-  const salaryDetailRef = collection(firestoreDB, collectionUserSalaryDetails);
-  const result = [];
-  const salary = {
-    "Basic Salary": "basicSalary",
-    HRA: "hra",
-    "Tax Deduction": "taxDeduction",
-    "Total Salary": "totalSalary",
-  };
-
-  const q = query(
-    salaryDetailRef,
-    where("uid", "==", uid),
-    where("year", "==", new Date().getFullYear()),
-    where("month", "==", monthIntToLongFormat(new Date().getMonth() - 1))
-  );
-  const querySnapshot = await getDocs(q);
-  let out: any = [];
-  querySnapshot.forEach((doc) => {
-    out.push(doc.data());
-  });
-  const record = out.at(0);
-  return out.at(0);
-};
-
 export const salaryBifurcationLastMonthsAPI = async (
   uid: string,
   lastMonths: number

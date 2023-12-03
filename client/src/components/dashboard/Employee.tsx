@@ -47,6 +47,7 @@ export default function Employee() {
       setIsLoading(false);
     };
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function Employee() {
       rangeText.current = salaryBifurcationData.range!;
     };
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pieGraphToggle]);
 
   return isLoading ? (

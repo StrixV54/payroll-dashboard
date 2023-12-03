@@ -1,5 +1,4 @@
 import { BarDatum, BarTooltipProps } from "@nivo/bar";
-import { RoleLevel } from "./interface";
 
 export const StylesConstant: { [key: string]: any } = {
   divCenterStyle: {

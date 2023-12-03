@@ -2,11 +2,7 @@ import { FormEvent } from "react";
 import {
   Box,
   Button,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import { DropdownOptions, StylesConstant } from "../utils/constants";

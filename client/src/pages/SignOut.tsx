@@ -22,6 +22,7 @@ export default function SignOut() {
       firebaseAuth.signOut();
     }
     navigate("/");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <Loading message="Logging Out !!" />;

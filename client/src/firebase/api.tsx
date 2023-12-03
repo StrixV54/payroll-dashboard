@@ -1,5 +1,4 @@
 import {
-  User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -9,7 +8,6 @@ import {
   QueryConstraint,
   SnapshotOptions,
   collection,
-  collectionGroup,
   doc,
   getDoc,
   getDocs,
@@ -31,9 +29,7 @@ import {
   UserInfoLogin,
   UserInfoPersonal,
 } from "../utils/interface";
-import * as admin from "firebase-admin";
 import { DropdownOptions } from "../utils/constants";
-import { StringSupportOption } from "prettier";
 
 export const collectionUser = "users";
 const collectionIdGenerator = "uniqueIdGenerator";

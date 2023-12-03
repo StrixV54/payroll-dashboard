@@ -1,9 +1,9 @@
 import { Container, Typography } from "@mui/material";
-import { useLocation, useRouteError } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { StylesConstant } from "../utils/constants";
 
 export default function ErrorPage() {
-  const error: any = useRouteError();
+  // const error: any = useRouteError();
   const location = useLocation();
 
   return (

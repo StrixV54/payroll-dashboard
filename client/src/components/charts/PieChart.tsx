@@ -1,7 +1,6 @@
 
 import { useTheme } from "@mui/material";
 import { MayHaveLabel, ResponsivePie } from "@nivo/pie";
-import { labelTooltip } from "../../utils/constants";
 
 export default function PieChart({ data }: { data: MayHaveLabel[] }) {
   const theme = useTheme();

@@ -17,7 +17,6 @@ import {
   signInWithGoogleAPI,
   signUpAPI,
 } from "../firebase/api";
-import { useDispatch } from "react-redux";
 import Loading from "./Loading";
 import { StylesConstant } from "../utils/constants";
 import { FcGoogle } from "react-icons/fc";
@@ -30,9 +29,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [dateofbirth, setDateofbirth] = useState<string | null>();
-
-  // const authState = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +41,7 @@ export default function SignUp() {
     });
 
     return () => unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

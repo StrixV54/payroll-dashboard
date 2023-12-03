@@ -17,7 +17,6 @@ import { Typography } from "@mui/material";
 
 export default function UsersListAdmin() {
   const [usersInfo, setUsersInfo] = useState<UserInfoFirebase[] | []>();
-  const uid = useSelector((state: RootState) => state.auth.user?.uid);
   const role = useSelector((state: RootState) => state.auth.user?.role);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();

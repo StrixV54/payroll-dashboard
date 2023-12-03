@@ -1,5 +1,5 @@
 import { useTheme } from "@mui/material";
-import { BarDatum, BarTooltipProps, ResponsiveBar } from "@nivo/bar";
+import { BarDatum, ResponsiveBar } from "@nivo/bar";
 import { labelTooltip } from "../../utils/constants";
 
 export default function GraphBar({

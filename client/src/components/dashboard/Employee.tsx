@@ -1,6 +1,5 @@
 import { Box, Grid, Paper, Typography, useTheme } from "@mui/material";
 import {
-  ColorConstant,
   DropdownOptions,
   StylesConstant,
 } from "../../utils/constants";
@@ -15,7 +14,6 @@ import {
 import { GraphBarWithLabel } from "../charts/GraphBar";
 import PieChart from "../charts/PieChart";
 import Dropdown from "../Dropdown";
-import { getLastMonths } from "../../utils/helper";
 
 const lastMonthsSpecific: { [key: string]: any } = {
   "Last Month": 1,

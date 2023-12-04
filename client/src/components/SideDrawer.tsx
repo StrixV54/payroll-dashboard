@@ -42,10 +42,9 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
         {
           section: "Data",
           routeList: [
-            { title: "Analytics", route: "/analytics" },
+            { title: "Users", route: "/users" },
             { title: "Department", route: "/department" },
             { title: "Teams", route: "/teams" },
-            { title: "Users", route: "/users" },
           ],
         },
         {

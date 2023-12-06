@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   Checkbox,
@@ -15,7 +14,6 @@ import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import { FormEvent, useEffect, useState } from "react";
 import { StylesConstant } from "../utils/constants";
 import { signInAPI, signInWithGoogleAPI } from "../firebase/api";
-import { useDispatch } from "react-redux";
 import Loading from "./Loading";
 import { FcGoogle } from "react-icons/fc";
 import { UserInfoLogin } from "../utils/interface";
@@ -23,7 +21,6 @@ import { firebaseAuth } from "../firebase/config";
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,6 +32,7 @@ export default function SignIn() {
     });
 
     return () => unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

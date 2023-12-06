@@ -51,6 +51,8 @@ export interface UserInfoSalary {
   month: string;
   year: string;
   employeeId: string;
+  uid?: string;
+  department: string;
 }
 
 export interface UserInterface {
@@ -62,4 +64,3 @@ export interface UserInterface {
 }
 
 export type RoleLevel = "Employee" | "Payroll Manager" | "Super Admin";
-

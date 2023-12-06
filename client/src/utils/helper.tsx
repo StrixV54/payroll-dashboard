@@ -49,3 +49,44 @@ export const numberFormat = (value: number) =>
     style: "currency",
     currency: "INR",
   }).format(value);
+
+export const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+export const monthIntToLongFormat = (value: number) => {
+  return monthNames[value];
+};
+
+export function getLastMonths(n: number) {
+  var months = [];
+
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = today.getMonth() - 1;
+
+  var i = 0;
+  do {
+    months.push({ month: monthNames[month], year });
+    if (month === 0) {
+      month = 11;
+      year--;
+    } else {
+      month--;
+    }
+    i++;
+  } while (i < n);
+
+  return months;
+}

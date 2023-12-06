@@ -12,12 +12,11 @@ import { RootState } from "../../redux/store";
 import {
   collectionUser,
   collectionUserSalaryDetails,
+  getAllPayMonthRecordAPI,
   getUserDetailsAPI,
-  getUserSalaryAPI,
   setUserSalaryAPI,
 } from "../../firebase/api";
 import {
-  ColorConstant,
   StylesConstant,
   UserRoleLevel,
 } from "../../utils/constants";
@@ -27,24 +26,24 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Autocomplete,
   Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  Divider,
   Grid,
   TextField,
   Typography,
 } from "@mui/material";
-import { orderBy } from "firebase/firestore";
-
-type eachDoc = {
-  document: UserInfoSalary;
-};
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { monthIntToLongFormat } from "../../utils/helper";
 
 const displayFieldsSalary = [
-  { title: "month", label: "Month" },
-  { title: "year", label: "Year" },
   { title: "totalSalary", label: "Total Salary" },
   { title: "hra", label: "HRA" },
   { title: "taxDeduction", label: "Tax Deduction" },
@@ -52,28 +51,58 @@ const displayFieldsSalary = [
 ];
 
 export default function SalaryInfo({ uid }: { uid: string }) {
-  const [basicInfoSalary, setBasicInfoSalary] = useState<any[]>();
+  const [basicInfoSalary, setBasicInfoSalary] = useState<UserInfoSalary[]>();
+  const [basicInfoSalaryMonth, setBasicInfoSalaryMonth] =
+    useState<UserInfoSalary>();
   const role = useSelector((state: RootState) => state.auth.user?.role);
   const employeeId: MutableRefObject<string | null> = useRef(null);
+  const department: MutableRefObject<string | null> = useRef(null);
+  const date = new Date();
+  const [monthYear, setMonthYear] = useState({
+    year: date.getFullYear().toString(),
+    month: date.toLocaleString("default", { month: "long" }),
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [viewPayslipMonthYear, setViewPayslipMonthYear] = useState({
+    year: date.getFullYear().toString(),
+    month: date.toLocaleString("default", { month: "long" }),
+  });
 
   useEffect(() => {
     //Fetch user detail
     const fetch = async () => {
-      const infoSalary = (await getUserSalaryAPI(
-        collectionUserSalaryDetails,
-        uid as string,
-        new Date().getFullYear().toString()
-      )) as UserInfoSalary[];
-      setBasicInfoSalary(infoSalary);
       const infoUser = (await getUserDetailsAPI(
         collectionUser,
         uid as string
       )) as UserInfoFirebase;
+      const infoSalaryDetails = await getAllPayMonthRecordAPI(uid);
+      setBasicInfoSalary(infoSalaryDetails as UserInfoSalary[]);
       employeeId.current = infoUser?.employeeId;
-      console.log(infoSalary);
+      department.current = infoUser?.department;
     };
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const isDisabledMonth = (date: Dayjs) => {
+    basicInfoSalary?.forEach((item) => {
+      if (
+        item.month === monthIntToLongFormat(date.month()) &&
+        item.year === date.year().toString()
+      ) {
+        return true;
+      }
+    });
+    return false;
+  };
+
+  const salaryList = basicInfoSalary?.map((item) => {
+    return {
+      label: item.month + " - " + item.year,
+      month: item.month,
+      year: item.year,
+    };
+  });
 
   const handleSubmitSalary = (event: FormEvent<HTMLFormElement>) => {
     if (role === UserRoleLevel.EMPLOYEE) return;
@@ -83,13 +112,15 @@ export default function SalaryInfo({ uid }: { uid: string }) {
     const data = new FormData(event.currentTarget);
 
     const userInfoSalary: UserInfoSalary = {
-      month: data.get("month") as string,
-      year: data.get("year") as string,
+      month: monthYear.month.toString(),
+      year: monthYear.year.toString(),
       employeeId: employeeId.current as string,
+      uid,
       totalSalary: data.get("totalSalary") as string,
       hra: data.get("hra") as string,
       taxDeduction: data.get("taxDeduction") as string,
       basicSalary: data.get("basicSalary") as string,
+      department: department.current as string,
     };
 
     setUserSalaryAPI(
@@ -121,6 +152,23 @@ export default function SalaryInfo({ uid }: { uid: string }) {
             sx={{ m: 3 }}
           >
             <Grid container spacing={4} marginTop={3}>
+              <Grid item xs={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    sx={{ width: "100%" }}
+                    label="Month-Year"
+                    views={["year", "month"]}
+                    defaultValue={dayjs()}
+                    shouldDisableMonth={isDisabledMonth}
+                    onAccept={(value) =>
+                      setMonthYear({
+                        year: value?.year().toString()!,
+                        month: monthIntToLongFormat(value?.month()!),
+                      })
+                    }
+                  />
+                </LocalizationProvider>
+              </Grid>
               {displayFieldsSalary.map((item, index) => (
                 <Grid item xs={6} key={index}>
                   <TextField
@@ -146,22 +194,59 @@ export default function SalaryInfo({ uid }: { uid: string }) {
           </Box>
         </AccordionDetails>
       </Accordion>
-      {basicInfoSalary?.map((item: eachDoc, index) => (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 6,
+          mb: 2,
+        }}
+      >
+        <Box flexGrow={1}>
+          <Typography gutterBottom variant="h6">
+            View PaySlip
+          </Typography>
+          <Divider sx={{ mb: 4, backgroundColor: "#3d3d3d" }} />
+        </Box>
+        <Autocomplete
+          onChange={(event, value) => {
+            setViewPayslipMonthYear({
+              month: value?.month!,
+              year: value?.year!,
+            });
+            const list = basicInfoSalary?.filter(
+              (item) => item.month === value?.month && item.year === value?.year
+            );
+            setBasicInfoSalaryMonth(list?.at(0));
+          }}
+          options={salaryList!}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Salary Slip" />
+          )}
+        />
+      </Box>
+      {basicInfoSalaryMonth ? (
         <Card
           variant="outlined"
-          key={index}
-          sx={{ backgroundColor: ColorConstant.TEAL_BG, mb: 2 }}
+          sx={{ backgroundColor: "background.paper", mb: 2 }}
         >
           <CardContent>
             <Typography sx={{ fontSize: 18 }} component="div" gutterBottom>
-              Month: {item?.document?.month} , Year: {item?.document?.year}
+              Month: {basicInfoSalaryMonth?.month} , Year:
+              {basicInfoSalaryMonth?.year}
             </Typography>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary">
-              Employee Id: {item?.document?.employeeId} <br />
-              Total Salary : {item?.document?.totalSalary} <br />
-              Basic Salary: {item?.document?.basicSalary} <br />
-              HRA: {item?.document?.hra} <br />
-              Tax Deduction: {item?.document?.taxDeduction} <br />
+            <Typography
+              sx={{ fontSize: 14, lineHeight: "2rem" }}
+              color="text.secondary"
+            >
+              Employee Id: {basicInfoSalaryMonth?.employeeId} <br />
+              Total Salary : {basicInfoSalaryMonth?.totalSalary} <br />
+              Basic Salary: {basicInfoSalaryMonth?.basicSalary} <br />
+              HRA: {basicInfoSalaryMonth?.hra} <br />
+              Tax Deduction: {basicInfoSalaryMonth?.taxDeduction} <br />
             </Typography>
           </CardContent>
           <CardActions>
@@ -170,7 +255,9 @@ export default function SalaryInfo({ uid }: { uid: string }) {
             </Button>
           </CardActions>
         </Card>
-      ))}
+      ) : (
+        <div>No Data Found</div>
+      )}
     </Fragment>
   );
 }

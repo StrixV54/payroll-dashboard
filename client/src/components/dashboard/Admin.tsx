@@ -1,30 +1,22 @@
-import { Box, Button, Grid, Paper, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Paper, Typography, useTheme } from "@mui/material";
 import {
   ColorConstant,
-  DropdownOptions,
   StylesConstant,
-} from "../utils/constants";
-import GraphBar from "./charts/GraphBar";
-import PieChart from "./charts/PieChart";
-import {
-  barData,
-  barDataEmployee,
-  lineDataMonth,
   lineDataYear,
-  pieData,
-} from "./charts/data";
-import LineChart from "./charts/LineChart";
-import MenuButton from "./MenuButton";
+} from "../../utils/constants";
+import GraphBar from "../charts/GraphBar";
+import PieChart from "../charts/PieChart";
 import { useEffect, useState } from "react";
 import {
   employeeDepartmentAPI,
   salaryDepartmentAPI,
   salaryRangeAPI,
-} from "../firebase/api";
-import { LoadingSection } from "../pages/Loading";
-import { numberFormat } from "../utils/helper";
+} from "../../firebase/api";
+import { LoadingSection } from "../../pages/Loading";
+import { numberFormat } from "../../utils/helper";
+import MenuButton from "../MenuButton";
+import LineChart from "../charts/LineChart";
 
-type GraphToggle = "year" | "month";
 interface PieDataProps {
   id: string;
   label: string;
@@ -40,7 +32,7 @@ interface SalaryVsDeptDataProps {
   salary: number;
 }
 
-export default function Dashboard() {
+export default function Admin() {
   const theme = useTheme();
   const [pieGraphData, setPieGraphData] = useState<PieDataProps[]>([]);
   const [barGraphEmployeeDeptData, setBarGraphEmployeeDeptData] = useState<
@@ -49,7 +41,6 @@ export default function Dashboard() {
   const [barGraphSalaryDeptData, setBarGraphSalaryDeptData] = useState<
     SalaryVsDeptDataProps[]
   >([]);
-  const [graphToggle, setGraphToggle] = useState<GraphToggle>("year");
   const [isLoading, setIsLoading] = useState(true);
   const [totalEmployee, setTotalEmployee] = useState(0);
   const [totalSalary, setTotalSalary] = useState(0);
@@ -60,8 +51,6 @@ export default function Dashboard() {
       const salaryRangeData = await salaryRangeAPI();
       const employeeVsDepartmentData = await employeeDepartmentAPI();
       const salaryVsDepartmentData = await salaryDepartmentAPI();
-      console.log(salaryVsDepartmentData);
-      // console.log(infoUser);
       setPieGraphData(salaryRangeData);
       setBarGraphEmployeeDeptData(employeeVsDepartmentData.result);
       setBarGraphSalaryDeptData(salaryVsDepartmentData.result);
@@ -72,12 +61,8 @@ export default function Dashboard() {
     fetch();
   }, []);
 
-  const handleCoverage = () => {
-    setGraphToggle((prev) => (prev === "year" ? "month" : "year"));
-  };
-
   return isLoading ? (
-    <LoadingSection />
+    <LoadingSection message="Loading... Please wait" />
   ) : (
     <Box
       sx={{
@@ -127,9 +112,14 @@ export default function Dashboard() {
               }}
             >
               <Typography fontSize="1.8rem" variant="body1" fontWeight="bold">
-                $543.51
+                {numberFormat(totalSalary)}
               </Typography>
-              <Typography fontSize="1.2rem">Total Profit Margin</Typography>
+              <Typography fontSize="1.2rem">
+                Total Salary Spent
+                <span style={{ opacity: 0.6, fontSize: "0.8rem" }}>
+                  &nbsp;(Annually)
+                </span>
+              </Typography>
             </Box>
           </Paper>
         </Grid>
@@ -169,39 +159,9 @@ export default function Dashboard() {
                   flexWrap: "nowrap",
                   width: "180px",
                 }}
-              >
-                <Button
-                  onClick={handleCoverage}
-                  sx={{
-                    fontSize: "0.7rem",
-                    backgroundColor:
-                      graphToggle === "year"
-                        ? theme.palette.background.btn
-                        : "none",
-                    color: theme.palette.text.primary,
-                  }}
-                >
-                  Year
-                </Button>
-                <Button
-                  onClick={handleCoverage}
-                  sx={{
-                    fontSize: "0.7rem",
-                    ml: 1,
-                    backgroundColor:
-                      graphToggle === "month"
-                        ? theme.palette.background.btn
-                        : "none",
-                    color: theme.palette.text.primary,
-                  }}
-                >
-                  Month
-                </Button>
-              </Box>
+              ></Box>
             </Box>
-            <LineChart
-              data={graphToggle === "year" ? lineDataYear : lineDataMonth}
-            />
+            <LineChart data={lineDataYear} />
           </Paper>
         </Grid>
         <Grid item xs={7}>
@@ -247,8 +207,11 @@ export default function Dashboard() {
               <Typography
                 component={"span"}
                 fontSize="0.8rem"
-                sx={{ color: ColorConstant.LIGHT_GRAY }}
-              ></Typography>
+                sx={{ color: ColorConstant.GRAY }}
+              >
+                {" "}
+                (No of Employee)
+              </Typography>
             </Typography>
             <PieChart data={pieGraphData} />
           </Paper>
@@ -260,16 +223,12 @@ export default function Dashboard() {
               padding: 3,
               boxShadow: "none",
               borderRadius: 3,
-              mb: 3,
               backgroundImage: "none",
             }}
           >
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography fontSize="0.8rem">Total Salary Spent:</Typography>
-              <Typography fontSize="1.5rem" variant="body1" fontWeight="bold">
-                {numberFormat(totalSalary)}
-              </Typography>
-            </Box>
+            <Typography fontSize="1.2rem">
+              Salary Spent for Year 2023
+            </Typography>
             <Box height={300}>
               <GraphBar
                 data={barGraphSalaryDeptData}

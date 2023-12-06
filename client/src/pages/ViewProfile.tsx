@@ -49,6 +49,7 @@ export default function ViewProfile() {
       setBasicInfoPersonal(infoPersonal);
     };
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

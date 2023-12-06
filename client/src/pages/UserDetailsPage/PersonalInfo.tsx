@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { UserInfoPersonal } from "../../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -50,6 +50,7 @@ export default function PersonalInfo({ uid }: { uid: string }) {
       setIsLoading(false);
     };
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (event: SelectChangeEvent<string>) => {

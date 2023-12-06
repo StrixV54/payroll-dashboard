@@ -1,7 +1,5 @@
 
 import {
-  ChangeEvent,
-  ChangeEventHandler,
   FormEvent,
   useEffect,
   useState,
@@ -68,6 +66,7 @@ export default function MainInfo({ uid }: { uid: string }) {
       setIsloading(false);
     };
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmitMain = (event: FormEvent<HTMLFormElement>) => {
@@ -91,7 +90,6 @@ export default function MainInfo({ uid }: { uid: string }) {
       department: formdata?.department || basicInfo?.department!,
     };
 
-    console.log(userInfoMain);
     if (userInfoMain)
       setUserDetailsAPI(collectionUser, userInfoMain, uid!).then(() =>
         toast.success("Added new details")

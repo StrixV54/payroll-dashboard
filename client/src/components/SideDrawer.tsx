@@ -11,13 +11,11 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { ColorConstant, StylesConstant } from "../utils/constants";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { RoleLevel } from "../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import themeSlice from "../redux/themeSlice";
 
 export const sidebarAccessLevelUser = (role: RoleLevel) => {
   switch (role) {
@@ -25,7 +23,10 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
       return [
         {
           section: "Data",
-          routeList: [{ title: "Users", route: "/users" }],
+          routeList: [
+            { title: "Users", route: "/users" },
+            { title: "Salary Detail", route: "/salarydetail" },
+          ],
         },
         {
           section: "Pages",
@@ -41,10 +42,9 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
         {
           section: "Data",
           routeList: [
-            { title: "Analytics", route: "/analytics" },
+            { title: "Users", route: "/users" },
             { title: "Department", route: "/department" },
             { title: "Teams", route: "/teams" },
-            { title: "Users", route: "/users" },
           ],
         },
         {

@@ -1,5 +1,5 @@
 import { RoleLevel } from "../utils/interface";
-import Dashboard from "../components/Dashboard";
+import Dashboard from "../components/dashboard/Dashboard";
 import Department from "../components/Department";
 import { Navigate } from "react-router-dom";
 import Layout from "../pages/Layout";
@@ -11,6 +11,7 @@ import ViewProfile from "../pages/ViewProfile";
 import UserDetails from "../pages/UserDetailsPage/UserDetails";
 import Users from "../pages/Users";
 import AddUser from "../pages/AddUser";
+import SalaryDetail from "../pages/SalaryDetail";
 
 export default function RouteProviderPlain(role: RoleLevel) {
   switch (role) {
@@ -45,6 +46,10 @@ export default function RouteProviderPlain(role: RoleLevel) {
                 {
                   path: "/department",
                   Component: Department,
+                },
+                {
+                  path: "/salarydetail",
+                  Component: SalaryDetail,
                 },
                 {
                   path: "/userdetails",

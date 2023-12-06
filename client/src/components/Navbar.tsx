@@ -11,10 +11,9 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { ColorConstant, StylesConstant } from "../utils/constants";
+import { StylesConstant } from "../utils/constants";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { changeMode } from "../redux/themeSlice";
@@ -22,7 +21,6 @@ import { changeMode } from "../redux/themeSlice";
 export default function Navbar() {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const mode = useSelector((state: RootState) => state.theme.mode);
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();

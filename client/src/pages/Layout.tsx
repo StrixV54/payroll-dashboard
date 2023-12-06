@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import { userIsAuthentic } from "../redux/authSlice";
 import SideDrawer from "../components/SideDrawer";
 import Navbar from "../components/Navbar";
-import { ColorConstant } from "../utils/constants";
 
 export default function HomeLayout() {
   const theme = useTheme();
@@ -24,12 +23,13 @@ export default function HomeLayout() {
       }
       //Fetch user detail
       const userInfo = await getUserDetailsAPI(collectionUser, user.uid);
-      localStorage.setItem("roleLevel", userInfo?.role);
+      localStorage.setItem("zuco-rolelevel-cache", userInfo?.role);
       dispatch(userIsAuthentic(userInfo as object));
       setIsLoading(false);
     });
 
     return () => unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return isLoading ? (

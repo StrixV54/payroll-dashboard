@@ -18,9 +18,8 @@ import UsersListAdmin from "../components/UsersListAdmin";
 
 export default function Users() {
   const [usersInfo, setUsersInfo] = useState<UserInfoFirebase[] | []>();
-  const uid = useSelector((state: RootState) => state.auth.user?.uid);
   const role =
-    useSelector((state: RootState) => state.auth.user?.role) || "Employee";
+    useSelector((state: RootState) => state.auth.user?.role);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -33,6 +32,7 @@ export default function Users() {
     };
     fetch();
   }, []);
+
   const rows = usersInfo
     ?.filter(
       (item: UserInfoFirebase) =>
@@ -81,7 +81,7 @@ export default function Users() {
   };
 
   const columns: GridColDef[] = [
-    ...ColumnsAccessSpecific[role],
+    ...ColumnsAccessSpecific[role!],
     {
       field: "actions",
       type: "actions",
@@ -97,8 +97,6 @@ export default function Users() {
       ],
     },
   ];
-
-  // console.log(usersInfo);
 
   return isLoading ? (
     <div>Loading....</div>

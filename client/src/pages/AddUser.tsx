@@ -2,11 +2,7 @@ import { FormEvent } from "react";
 import {
   Box,
   Button,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import { DropdownOptions, StylesConstant } from "../utils/constants";
@@ -54,23 +50,17 @@ export default function AddUser() {
     <Box component="form" noValidate onSubmit={handleSubmitMain} sx={{ m: 3 }}>
       <Grid container spacing={4}>
         {displayFieldsBasic.map((item, index) => {
-          if (item.title === "grade")
+          if (
+            item.title === "grade" ||
+            item.title === "department" ||
+            item.title === "role"
+          )
             return (
               <Grid item xs={12} key={index}>
                 <Dropdown
                   title={item.title}
                   label={item.label}
-                  options={DropdownOptions.grade}
-                />
-              </Grid>
-            );
-          if (item.title === "department")
-            return (
-              <Grid item xs={12} key={index}>
-                <Dropdown
-                  title={item.title}
-                  label={item.label}
-                  options={DropdownOptions.department}
+                  options={DropdownOptions[item.title]}
                 />
               </Grid>
             );

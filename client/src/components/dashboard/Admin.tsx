@@ -91,7 +91,7 @@ export default function Admin() {
       }}
     >
       <Grid container spacing={3}>
-        <Grid item xs={6}>
+        <Grid item sm={6} xs={12}>
           <Paper
             sx={{
               padding: 3,
@@ -142,7 +142,7 @@ export default function Admin() {
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item sm={6} xs={12}>
           <Paper
             sx={{
               padding: 3,
@@ -183,7 +183,7 @@ export default function Admin() {
             <LineChart data={lineDataYear} />
           </Paper>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item md={7} sm={12}>
           <Paper
             sx={{
               backgroundColor: theme.palette.background.paper,
@@ -210,7 +210,7 @@ export default function Admin() {
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12} sm={5}>
           <Paper
             sx={{
               height: 400,
@@ -235,7 +235,7 @@ export default function Admin() {
             <PieChart data={pieGraphData} />
           </Paper>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item sm={7} xs={12}>
           <Paper
             sx={{
               backgroundColor: theme.palette.background.paper,

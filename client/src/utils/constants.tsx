@@ -117,12 +117,14 @@ export const ColorConstant = {
   TEAL_ACTIVE_BG: "#091e20",
   TEAL_HOVER_BG: "#3eb0ac",
   TEAL_LIGHT_HOVER_BG: "#395b5f",
+  TEAL_LIGHT_SHADE_BG: "#1e383c",
   TEAL_SIDEBAR_BG: "#0d4250",
   TEAL_SIDEBAR_HOVER_BG: "#0b2b34",
   // THEME - LIGHT
   LIGHT_BG: "#f4f4f4",
   LIGHT_SHADE_BG: "#dcdcdc",
   LIGHT_TEAL_BG: "#63b0ad",
+  LIGHT_WHITE_SHADE_BG: "#cbe6e3",
   LIGHT_SIDEBAR_BG: "#a3dfe1",
   LIGHT_SIDEBAR_HOVER_BG: "#a2ceda",
   // DEFAULTS

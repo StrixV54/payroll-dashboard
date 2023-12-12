@@ -8,12 +8,14 @@ import { useDispatch } from "react-redux";
 import { userIsAuthentic } from "../redux/authSlice";
 import SideDrawer from "../components/SideDrawer";
 import Navbar from "../components/Navbar";
+import SideDrawerMini from "../components/SideDrawerMini";
 
 export default function HomeLayout() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
@@ -29,9 +31,11 @@ export default function HomeLayout() {
     });
 
     return () => unsubscribe();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const toggleDrawer = () => setIsSidebarOpen((prev) => !prev);
+  
   return isLoading ? (
     <Loading message="Checking Login !!" />
   ) : (
@@ -44,9 +48,10 @@ export default function HomeLayout() {
       }}
     >
       {/*  ------ Navbar ------ */}
-      <Navbar />
+      <Navbar toggleDrawer={toggleDrawer} />
       {/*  ------ SideBar ------ */}
       <SideDrawer />
+      <SideDrawerMini isOpen={isSidebarOpen} toggleDrawer={toggleDrawer} />
       {/*  ------ Main Section ------ */}
       <Box
         component="main"

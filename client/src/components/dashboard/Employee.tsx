@@ -20,10 +20,14 @@ const lastMonthsSpecific: { [key: string]: any } = {
   "Financial Year": 12,
 };
 
-const lastYearList = getLastYears(3).map((item: any) => ({
-  label: item,
-  value: item,
-}));
+const lastYearList = getLastYears(3).map((item: any) => {
+  let nxtyear = Number(item) + 1;
+  nxtyear = nxtyear % 100;
+  return {
+    label: item + "-" + nxtyear,
+    value: item,
+  };
+});
 
 const currentYear = new Date().getFullYear().toString();
 
@@ -97,7 +101,7 @@ export default function Employee() {
               </Typography>
               <Dropdown
                 title="Select Year"
-                label=""
+                label="FY"
                 initValue={currentYear}
                 options={lastYearList}
                 fullWidth={false}

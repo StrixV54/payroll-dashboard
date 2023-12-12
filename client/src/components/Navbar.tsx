@@ -17,8 +17,9 @@ import { StylesConstant } from "../utils/constants";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { changeMode } from "../redux/themeSlice";
+import MenuIcon from "@mui/icons-material/Menu";
 
-export default function Navbar() {
+export default function Navbar({ toggleDrawer }: { toggleDrawer: () => void }) {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const dispatch = useDispatch();
@@ -49,9 +50,32 @@ export default function Navbar() {
       }}
     >
       <Toolbar sx={{ height: "80px", justifyContent: "space-between" }}>
-        <Typography component="h6" fontWeight="bold" mr={4} fontSize={"1.4rem"}>
-          ZUCO
-        </Typography>
+        <Box component={"div"} sx={{ ...StylesConstant.divCenterStyle }}>
+          <Typography
+            component="h6"
+            fontWeight="bold"
+            mr={4}
+            fontSize={"1.4rem"}
+          >
+            ZUCO
+          </Typography>
+          <IconButton
+            sx={{
+              ml: 2,
+              // border: "1px solid #444",
+              ...StylesConstant.divCenterStyle,
+              display: { lg: "none", md: "block" },
+              backgroundColor: theme.palette.background.lightshade,
+              borderRadius: "8px",
+              padding: "auto",
+              height: "40px",
+            }}
+            onClick={toggleDrawer}
+            color="inherit"
+          >
+            <MenuIcon />
+          </IconButton>
+        </Box>
         <Box sx={StylesConstant.divCenterStyle}>
           <IconButton
             sx={{ mr: 2 }}

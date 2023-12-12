@@ -7,10 +7,12 @@ import { firebaseAuth, firebaseGoogleAuth, firestoreDB } from "./config";
 import {
   QueryConstraint,
   SnapshotOptions,
+  and,
   collection,
   doc,
   getDoc,
   getDocs,
+  or,
   query,
   setDoc,
   updateDoc,
@@ -18,7 +20,8 @@ import {
 } from "firebase/firestore";
 import toast from "react-hot-toast";
 import {
-  getLastMonths,
+  getFYYear,
+  getLastMonthsOrFY,
   monthNames,
   printFirebaseError,
 } from "../utils/helper";
@@ -382,22 +385,112 @@ export const salaryRangeAPI = async () => {
 };
 
 //Salary Analytics month wise for a department , data processing API
-export const salaryAnalyticsDepartmentAPI = async (year: string) => {
+export const salaryAnalyticsYearDepartmentAPI = async (year: string) => {
   const salaryDetailRef = collection(firestoreDB, collectionUserSalaryDetails);
   const result = [];
+  const firebaseQuery = monthNames.map((month) => {
+    return and(where("year", "==", year), where("month", "==", month));
+  });
+
+  const q = query(salaryDetailRef, or(...firebaseQuery));
+  const querySnapshot = await getDocs(q);
+  let docOut: any = [];
+  querySnapshot.forEach((doc) => {
+    docOut.push(doc.data());
+  });
+
   for (let month of monthNames) {
     let ans = { month };
     for (let department of DropdownOptions.department) {
-      const q = query(
-        salaryDetailRef,
-        where("year", "==", year),
-        where("department", "==", department.value),
-        where("month", "==", month)
-      );
-      const querySnapshot = await getDocs(q);
       let out = 0;
-      querySnapshot.forEach((doc) => {
-        out += Number(doc.data()?.totalSalary);
+      let dep = docOut.filter(
+        (item: any) =>
+          item?.department === department.value && item?.month === month
+      );
+      dep.forEach((element: any) => {
+        out += Number(element?.totalSalary);
+      });
+      ans = { ...ans, [department.value]: out };
+    }
+
+    result.push({ ...ans });
+  }
+  return result;
+};
+
+//Salary Analytics month wise for a department , data processing API
+export const salaryAnalyticsQuarterDepartmentAPI = async (year: string) => {
+  const salaryDetailRef = collection(firestoreDB, collectionUserSalaryDetails);
+  const result = [];
+  const firebaseQuery = monthNames.map((month) => {
+    return and(where("year", "==", year), where("month", "==", month));
+  });
+
+  const q = query(salaryDetailRef, or(...firebaseQuery));
+  const querySnapshot = await getDocs(q);
+  let docOut: any = [];
+  querySnapshot.forEach((doc) => {
+    docOut.push(doc.data());
+  });
+
+  const qtr: { [key: string]: string[] } = {
+    Q1: ["January", "February", "March"],
+    Q2: ["April", "May", "June"],
+    Q3: ["July", "August", "September"],
+    Q4: ["October", "November", "December"],
+  };
+
+  for (let quarter of Object.keys(qtr)) {
+    let ans = { quarter };
+    for (let department of DropdownOptions.department) {
+      let out = 0;
+      let dep = docOut.filter(
+        (item: any) =>
+          item?.department === department.value &&
+          qtr[quarter].includes(item?.month)
+      );
+      dep.forEach((element: any) => {
+        out += Number(element?.totalSalary);
+      });
+      ans = { ...ans, [department.value]: out };
+    }
+
+    result.push({ ...ans });
+  }
+  return result;
+};
+
+//Salary Analytics month wise for a department , data processing API
+export const salaryAnalyticsHalfYearDepartmentAPI = async (year: string) => {
+  const salaryDetailRef = collection(firestoreDB, collectionUserSalaryDetails);
+  const result = [];
+  const firebaseQuery = monthNames.map((month) => {
+    return and(where("year", "==", year), where("month", "==", month));
+  });
+
+  const q = query(salaryDetailRef, or(...firebaseQuery));
+  const querySnapshot = await getDocs(q);
+  let docOut: any = [];
+  querySnapshot.forEach((doc) => {
+    docOut.push(doc.data());
+  });
+
+  const qtr: { [key: string]: string[] } = {
+    H1: ["January", "February", "March", "April", "May", "June"],
+    H2: ["July", "August", "September", "October", "November", "December"],
+  };
+
+  for (let halfyear of Object.keys(qtr)) {
+    let ans = { halfyear };
+    for (let department of DropdownOptions.department) {
+      let out = 0;
+      let dep = docOut.filter(
+        (item: any) =>
+          item?.department === department.value &&
+          qtr[halfyear].includes(item?.month)
+      );
+      dep.forEach((element: any) => {
+        out += Number(element?.totalSalary);
       });
       ans = { ...ans, [department.value]: out };
     }
@@ -446,30 +539,47 @@ export const salaryAnalyticsEmployeeYearAPI = async (
 ) => {
   const salaryDetailRef = collection(firestoreDB, collectionUserSalaryDetails);
   const result = [];
-  for (let month of monthNames) {
-    const q = query(
-      salaryDetailRef,
+  const nextYear = String(Number(year) + 1);
+  const firebaseQuery = monthNames.map((month) => {
+    return and(
       where("uid", "==", uid),
-      where("year", "==", year),
+      where("year", "in", [year, nextYear]),
       where("month", "==", month)
     );
-    const querySnapshot = await getDocs(q);
-    let out: any = [];
-    querySnapshot.forEach((doc) => {
-      out.push(doc.data());
-    });
-    const record = out.at(0);
+  });
+
+  const q = query(salaryDetailRef, or(...firebaseQuery));
+  const querySnapshot = await getDocs(q);
+  let out: any = [];
+  querySnapshot.forEach((doc) => {
+    out.push(doc.data());
+  });
+  console.log(out);
+  const monthRange = getFYYear(Number(year), 4);
+
+  for (let month of monthRange) {
+    const record = out
+      .filter(
+        (item: any) =>
+          item?.month === month.month && item?.year === month.fyYear.toString()
+      )
+      .at(0);
     const salary = {
       "Basic Salary":
         Number(record?.basicSalary.toString().replace(",", "")) || 0,
       HRA: Number(record?.hra.toString().replace(",", "")) || 0,
-      "Tax Deduction":
-        Number(record?.taxDeduction.toString().replace(",", "")) || 0,
+      Taxable: Number(record?.taxable.toString().replace(",", "")) || 0,
       "Total Salary":
         Number(record?.totalSalary.toString().replace(",", "")) || 0,
+      Reimbursement:
+        Number(record?.reimbursement.toString().replace(",", "")) || 0,
+      PF: Number(record?.pf.toString().replace(",", "")) || 0,
+      "Meal Allowance":
+        Number(record?.mealAllowance.toString().replace(",", "")) || 0,
     };
-    result.push({ month, ...salary });
+    result.push({ month: month.month, ...salary });
   }
+  console.log(result);
   return result;
 };
 
@@ -483,16 +593,20 @@ export const salaryBifurcationLastMonthsAPI = async (
   const salary: { [key: string]: any } = {
     "Basic Salary": "basicSalary",
     HRA: "hra",
-    "Tax Deduction": "taxDeduction",
-    "Total Salary": "totalSalary",
+    Taxable: "taxable",
+    PF: "pf",
+    Reimbursement: "reimbursement",
+    "Meal Allowance": "mealAllowance",
   };
   const salaryValue: { [key: string]: any } = {
     "Basic Salary": 0,
     HRA: 0,
-    "Tax Deduction": 0,
-    "Total Salary": 0,
+    Taxable: 0,
+    PF: 0,
+    Reimbursement: 0,
+    "Meal Allowance": 0,
   };
-  const monthRange = getLastMonths(lastMonths);
+  const monthRange = getLastMonthsOrFY(lastMonths, 4);
   let range =
     monthRange.length === 1
       ? monthRange.at(0)?.month! + " " + monthRange.at(0)?.year!
@@ -504,24 +618,26 @@ export const salaryBifurcationLastMonthsAPI = async (
         " " +
         monthRange.at(monthRange.length - 1)?.year!;
 
-  for (let data of monthRange) {
-    const q = query(
-      salaryDetailRef,
+  const firebaseQuery = monthRange.map((data) => {
+    return and(
       where("uid", "==", uid),
       where("year", "==", data.year.toString()),
       where("month", "==", data.month)
     );
-    const querySnapshot = await getDocs(q);
-    let out: any = [];
-    querySnapshot.forEach((doc) => {
-      out.push(doc.data());
-    });
-    const record = out.at(0);
+  });
 
+  const q = query(salaryDetailRef, or(...firebaseQuery));
+  const querySnapshot = await getDocs(q);
+  let out: any = [];
+  querySnapshot.forEach((doc) => {
+    out.push(doc.data());
+  });
+
+  for (let data of out) {
     for (let field of Object.keys(salary)) {
-      if (record && record[salary[field]])
+      if (data[salary[field]])
         salaryValue[field] += Number(
-          record[salary[field]].toString().replace(",", "")
+          data[salary[field]].toString().replace(",", "")
         );
       else salaryValue[field] += 0;
     }
@@ -534,4 +650,51 @@ export const salaryBifurcationLastMonthsAPI = async (
     });
   }
   return { result, range };
+};
+
+//Salary Analytics month wise for an employee , data processing API
+export const employeeDepartmentStatusYearAPI = async (year: string) => {
+  const userDetailRef = collection(firestoreDB, collectionUserDetails);
+  const userRef = collection(firestoreDB, collectionUser);
+  const result = [];
+
+  const querySnapshot = await getDocs(userRef);
+  let outputUser: any = [];
+  querySnapshot.forEach((doc) => {
+    outputUser.push(doc.data());
+  });
+
+  const querySnapshotDetail = await getDocs(userDetailRef);
+  let outputDetails: any = [];
+  querySnapshotDetail.forEach((doc) => {
+    outputDetails.push(doc.data());
+  });
+  // const monthRange = getLastMonthsOrFY(12, 4);
+
+  for (let department of DropdownOptions.department) {
+    const activeValue = outputUser.filter(
+      (item: any) =>
+        item?.department === department.value && item?.status === "Active"
+    );
+    const inactiveValue = outputUser.filter(
+      (item: any) =>
+        item?.department === department.value && item?.status === "Inactive"
+    );
+    const promotedValue = outputDetails.filter(
+      (item: any) =>
+        item?.promoted &&
+        outputUser.filter(
+          (userItem: any) =>
+            userItem?.uid === item?.uid &&
+            userItem?.department === department.value
+        ).length > 0
+    );
+    result.push({
+      department: department.value,
+      Active: activeValue.length,
+      Inactive: inactiveValue.length,
+      Promoted: promotedValue.length,
+    });
+  }
+  return result;
 };

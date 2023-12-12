@@ -27,6 +27,10 @@ const displayFieldsPersonal = [
   { title: "currentAddress", label: "Current Address" },
   { title: "maritialStatus", label: "Maritial Status" },
   { title: "workSkills", label: "Work Skills" },
+  { title: "promoted", label: "Promoted" },
+  { title: "promotedDate", label: "Promoted Date" },
+  { title: "pfNumber", label: "PF Number" },
+  { title: "uanNumber", label: "UAN Number" },
 ];
 
 const formdataFields = ["maritialStatus"];
@@ -50,7 +54,7 @@ export default function PersonalInfo({ uid }: { uid: string }) {
       setIsLoading(false);
     };
     fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
@@ -77,7 +81,11 @@ export default function PersonalInfo({ uid }: { uid: string }) {
       currentAddress: data.get("currentAddress") as string,
       maritialStatus: formdata?.maritialStatus,
       workSkills: data.get("workSkills") as string,
-      uid
+      promoted: data.get("promoted") as string,
+      promotedDate: data.get("promotedDate") as string,
+      pfNumber: data.get("pfNumber") as string,
+      uanNumber: data.get("uanNumber") as string,
+      uid,
     };
 
     if (userInfoPersl)

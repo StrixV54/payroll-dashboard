@@ -3,8 +3,8 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { InputLabel } from "@mui/material";
 
-type ItemProps = {
-  value: string;
+export type ItemProps = {
+  value: string | number;
   label: string;
 };
 
@@ -18,7 +18,7 @@ export default function Dropdown({
 }: {
   title: string;
   label: string;
-  initValue?: string;
+  initValue?: string | number;
   onChange?: (event: SelectChangeEvent) => void;
   options: Array<ItemProps>;
   fullWidth?: boolean;

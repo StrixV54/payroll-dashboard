@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Box,
   Drawer,
@@ -13,8 +14,6 @@ import {
 } from "@mui/material";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 import { RoleLevel } from "../utils/interface";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 import GridViewIcon from "@mui/icons-material/GridView";
 import PeopleIcon from "@mui/icons-material/People";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
@@ -22,6 +21,8 @@ import QuizIcon from "@mui/icons-material/Quiz";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 export const sidebarAccessLevelUser = (role: RoleLevel) => {
   switch (role) {
@@ -92,32 +93,36 @@ export const sidebarAccessLevelUser = (role: RoleLevel) => {
   }
 };
 
-export default function SideDrawer() {
+export default function SideDrawerMini({
+  isOpen,
+  toggleDrawer,
+}: {
+  isOpen: boolean;
+  toggleDrawer: () => void;
+}) {
   const theme = useTheme();
   const role = useSelector(
     (state: RootState) => state.auth.user?.role
   ) as RoleLevel;
 
-  // console.log(role);
   return (
     <Drawer
-      variant="permanent"
-      component="nav"
+      open={isOpen}
+      onClose={toggleDrawer}
       sx={{
         width: 250,
-        display: { lg: "flex", xs: "none" },
         flexShrink: 0,
-        backgroundColor: theme.palette.background.appbar,
         [`& .MuiDrawer-paper`]: {
           width: 250,
           backgroundColor: theme.palette.background.appbar,
           boxSizing: "border-box",
           borderRight: "none",
+          backgroundImage: "none",
         },
       }}
     >
       <Toolbar sx={{ height: "80px" }} />
-      <Box sx={{ overflow: "auto", paddingX: "16px", borderRight: "none" }}>
+      <Box sx={{ overflow: "auto", paddingX: "16px", borderRight: "none" }} role="presentation">
         <List>
           {["Dashboard"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ mb: 1 }}>

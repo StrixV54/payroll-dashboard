@@ -1,8 +1,5 @@
 import { Box, Grid, Paper, Typography, useTheme } from "@mui/material";
-import {
-  DropdownOptions,
-  StylesConstant,
-} from "../../utils/constants";
+import { DropdownOptions, StylesConstant } from "../../utils/constants";
 import { useEffect, useRef, useState } from "react";
 import { LoadingSection } from "../../pages/Loading";
 import { useSelector } from "react-redux";
@@ -14,13 +11,25 @@ import {
 import { GraphBarWithLabel } from "../charts/GraphBar";
 import PieChart from "../charts/PieChart";
 import Dropdown from "../Dropdown";
+import { getFYYear, getLastYears } from "../../utils/helper";
 
 const lastMonthsSpecific: { [key: string]: any } = {
   "Last Month": 1,
   "Last 3 Months": 3,
   "Last 6 Months": 6,
-  "For a Year": 12,
+  "Financial Year": 12,
 };
+
+const lastYearList = getLastYears(3).map((item: any) => {
+  let nxtyear = Number(item) + 1;
+  nxtyear = nxtyear % 100;
+  return {
+    label: item + "-" + nxtyear,
+    value: item,
+  };
+});
+
+const currentYear = new Date().getFullYear().toString();
 
 export default function Employee() {
   const theme = useTheme();
@@ -36,19 +45,21 @@ export default function Employee() {
     lastMonthsSpecific["Last Month"]
   );
   const rangeText = useRef("");
+  const [lastYearsSelect, setLastYearsSelect] = useState(currentYear);
 
   useEffect(() => {
     const fetch = async () => {
       const employeeSalaryYearData = await salaryAnalyticsEmployeeYearAPI(
         uid!,
-        "2023"
+        lastYearsSelect
       );
       setBarGraphEmployeeSalaryAnaytics(employeeSalaryYearData);
       setIsLoading(false);
+      console.log(getFYYear(2023, 4));
     };
     fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastYearsSelect]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -60,7 +71,7 @@ export default function Employee() {
       rangeText.current = salaryBifurcationData.range!;
     };
     fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pieGraphToggle]);
 
   return isLoading ? (
@@ -84,11 +95,33 @@ export default function Employee() {
               backgroundImage: "none",
             }}
           >
-            <Typography fontSize="1.2rem">Salary Chart Monthly</Typography>
-            <Box height={300}>
+            <Box display={"flex"} flexDirection={"row"}>
+              <Typography fontSize="1.2rem" flex={1}>
+                Salary Chart Monthly
+              </Typography>
+              <Dropdown
+                title="Select Year"
+                label="FY"
+                initValue={currentYear}
+                options={lastYearList}
+                fullWidth={false}
+                onChange={(event) => {
+                  setLastYearsSelect(event.target.value.toString());
+                }}
+              />
+            </Box>
+            <Box height={400}>
               <GraphBarWithLabel
                 data={barGraphEmployeeSalaryAnaytics}
-                keys={["Basic Salary", "HRA", "Tax Deduction", "Total Salary"]}
+                keys={[
+                  "Basic Salary",
+                  "HRA",
+                  "Taxable",
+                  "Total Salary",
+                  "PF",
+                  "Reimbursement",
+                  "Meal Allowance",
+                ]}
                 xaxis="Month"
                 yaxis="Salary"
                 indexBy="month"

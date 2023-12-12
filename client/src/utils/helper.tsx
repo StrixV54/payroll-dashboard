@@ -69,12 +69,22 @@ export const monthIntToLongFormat = (value: number) => {
   return monthNames[value];
 };
 
-export function getLastMonths(n: number) {
-  var months = [];
+/**
+ *
+ * @param n last n months
+ * @param fincMonth 1 - jan, 12 - dec
+ * @returns month and year as array
+ */
+export function getLastMonthsOrFY(n: number, fincMonth: number) {
+  let months = [];
 
-  var today = new Date();
-  var year = today.getFullYear();
-  var month = today.getMonth() - 1;
+  let today = new Date();
+  let year = today.getFullYear();
+  let month = today.getMonth() - 1;
+
+  // n = 12 ==> Financial Year
+  if (n === 12)
+    n = month >= fincMonth ? month - fincMonth + 2 : 12 - fincMonth + month + 2;
 
   var i = 0;
   do {
@@ -84,6 +94,46 @@ export function getLastMonths(n: number) {
       year--;
     } else {
       month--;
+    }
+    i++;
+  } while (i < n);
+
+  return months;
+}
+
+export function getLastYears(n: number) {
+  let years = [];
+
+  let today = new Date();
+  let year = today.getFullYear();
+
+  var i = 0;
+  do {
+    years.push(year);
+    year--;
+    i++;
+  } while (i < n);
+
+  return years;
+}
+
+export function getFYYear(fyYear: number, fincMonth: number) {
+  let months = [];
+
+  let today = new Date();
+  let year = today.getFullYear();
+  let month = fincMonth;
+
+  let n = 12;
+  let i = 0;
+  do {
+    months.push({ month: monthNames[month], fyYear });
+    if (month === today.getMonth() - 1 && fyYear === year) break;
+    if (month === 11) {
+      month = 0;
+      fyYear++;
+    } else {
+      month++;
     }
     i++;
   } while (i < n);

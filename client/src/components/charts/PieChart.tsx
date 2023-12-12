@@ -1,6 +1,6 @@
-
 import { useTheme } from "@mui/material";
 import { MayHaveLabel, ResponsivePie } from "@nivo/pie";
+import { labelTooltipPie } from "../../utils/constants";
 
 export default function PieChart({ data }: { data: MayHaveLabel[] }) {
   const theme = useTheme();
@@ -21,6 +21,7 @@ export default function PieChart({ data }: { data: MayHaveLabel[] }) {
         modifiers: [["darker", 0.2]],
       }}
       arcLinkLabelsSkipAngle={10}
+      tooltip={labelTooltipPie}
       arcLinkLabelsTextColor={theme.palette.text.primary}
       arcLinkLabelsThickness={2}
       arcLinkLabelsColor={{ from: "color" }}

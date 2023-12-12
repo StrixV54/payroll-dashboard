@@ -13,9 +13,10 @@ import {
   salaryRangeAPI,
 } from "../../firebase/api";
 import { LoadingSection } from "../../pages/Loading";
-import { numberFormat } from "../../utils/helper";
+import { getLastYears, numberFormat } from "../../utils/helper";
 import MenuButton from "../MenuButton";
 import LineChart from "../charts/LineChart";
+import Dropdown from "../Dropdown";
 
 interface PieDataProps {
   id: string;
@@ -41,9 +42,27 @@ export default function Admin() {
   const [barGraphSalaryDeptData, setBarGraphSalaryDeptData] = useState<
     SalaryVsDeptDataProps[]
   >([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [yearPicker, setYearPicker] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(true);
   const [totalEmployee, setTotalEmployee] = useState(0);
   const [totalSalary, setTotalSalary] = useState(0);
+
+  useEffect(() => {
+    //Fetch user detail
+    const fetch = async () => {
+      const salaryRangeData = await salaryRangeAPI();
+      const employeeVsDepartmentData = await employeeDepartmentAPI();
+      const salaryVsDepartmentData = await salaryDepartmentAPI();
+      setPieGraphData(salaryRangeData);
+      setBarGraphEmployeeDeptData(employeeVsDepartmentData.result);
+      setBarGraphSalaryDeptData(salaryVsDepartmentData.result);
+      setTotalEmployee(employeeVsDepartmentData.totalEmployee);
+      setTotalSalary(salaryVsDepartmentData.totalSalarySpentOverall);
+      setIsLoading(false);
+    };
+    fetch();
+  }, []);
 
   useEffect(() => {
     //Fetch user detail
@@ -226,9 +245,23 @@ export default function Admin() {
               backgroundImage: "none",
             }}
           >
-            <Typography fontSize="1.2rem">
-              Salary Spent for Year 2023
-            </Typography>
+            <Box display="flex" flexDirection="row" alignItems="center">
+              <Typography fontSize="1.2rem" flex={1}>
+                Salary Spent
+              </Typography>
+              <Dropdown
+                title="Year"
+                label="Year"
+                initValue={new Date().getFullYear()}
+                onChange={(event) => {
+                  setYearPicker(Number(event.target.value));
+                }}
+                options={getLastYears(3).map((item) => {
+                  return { value: item, label: item.toString() };
+                })}
+                fullWidth={false}
+              />
+            </Box>
             <Box height={300}>
               <GraphBar
                 data={barGraphSalaryDeptData}

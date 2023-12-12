@@ -39,19 +39,26 @@ export interface UserInfoPersonal {
   pancard: string;
   pfaAccount: string;
   dateJoined: string;
+  pfNumber: string;
+  uanNumber: string;
+  promoted: string;
+  promotedDate?: string;
   manager: string;
-  uid?: string;
+  uid: string;
 }
 
 export interface UserInfoSalary {
   basicSalary: string;
   hra: string;
   totalSalary: string;
-  taxDeduction: string;
+  taxable: string;
   month: string;
   year: string;
+  pf: string;
+  reimbursement: string;
+  mealAllowance: string;
   employeeId: string;
-  uid?: string;
+  uid: string;
   department: string;
 }
 

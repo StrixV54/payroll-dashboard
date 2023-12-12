@@ -31,6 +31,7 @@ export default function GraphBar({
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
       colors={{ scheme: "paired" }}
+      colorBy="indexValue"
       axisTop={null}
       axisRight={null}
       axisBottom={{
@@ -51,7 +52,8 @@ export default function GraphBar({
         legendOffset: -10,
       }}
       enableGridY={false}
-      isInteractive={false}
+      tooltip={labelTooltip}
+      isInteractive={true}
       enableLabel={true}
       labelSkipWidth={12}
       labelSkipHeight={12}
@@ -75,6 +77,8 @@ export function GraphBarWithLabel({
   indexBy,
   mode = "stacked",
   enableLabel = true,
+  tickValues = undefined,
+  enableGridY = true,
 }: {
   data: Array<object>;
   keys: Array<string>;
@@ -83,6 +87,8 @@ export function GraphBarWithLabel({
   indexBy: string;
   mode?: groupMode;
   enableLabel?: boolean;
+  tickValues?: Array<any> | undefined;
+  enableGridY?: boolean;
 }) {
   const theme = useTheme();
 
@@ -115,18 +121,20 @@ export function GraphBarWithLabel({
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
+        tickValues: tickValues,
         legend: yaxis,
         legendPosition: "middle",
         legendOffset: -60,
       }}
+      enableGridY={enableGridY}
       isInteractive={true}
       enableLabel={enableLabel}
       labelSkipWidth={12}
       labelSkipHeight={12}
-      // labelTextColor={{
-      //   from: "color",
-      //   modifiers: [["darker", 1.6]],
-      // }}
+      labelTextColor={{
+        from: "color",
+        modifiers: [["darker", 1.6]],
+      }}
       legends={[
         {
           dataFrom: "keys",

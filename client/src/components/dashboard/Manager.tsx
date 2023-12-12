@@ -1,18 +1,25 @@
 import { Box, Grid, Paper, Typography, useTheme } from "@mui/material";
-import { ColorConstant, StylesConstant } from "../../utils/constants";
+import {
+  ColorConstant,
+  DropdownOptions,
+  StylesConstant,
+} from "../../utils/constants";
 import { GraphBarWithLabel } from "../charts/GraphBar";
-import PieChart from "../charts/PieChart";
 import { useEffect, useState } from "react";
 import {
-  getEmployeesStatusAPI,
-  salaryAnalyticsDepartmentAPI,
+  employeeDepartmentStatusYearAPI,
+  salaryAnalyticsHalfYearDepartmentAPI,
+  salaryAnalyticsQuarterDepartmentAPI,
+  salaryAnalyticsYearDepartmentAPI,
 } from "../../firebase/api";
 import { LoadingSection } from "../../pages/Loading";
+import Dropdown from "../Dropdown";
 
-interface PieDataProps {
-  id: string;
-  label: string;
-  value: number;
+interface EmployeeStatusDataProps {
+  Active: number;
+  Inactive: number;
+  Promoted: number;
+  department: string;
 }
 
 interface SalaryMonthWiseDataProps {
@@ -27,27 +34,35 @@ interface SalaryMonthWiseDataProps {
 
 export default function Manager() {
   const theme = useTheme();
-  const [pieGraphEmployeesStatusData, setPieGraphEmployeesStatusData] =
-    useState<PieDataProps[]>([]);
+  const [barGraphEmployeesStatusData, setBarGraphEmployeesStatusData] =
+    useState<EmployeeStatusDataProps[]>([]);
   const [barGraphSalaryMonthWiseData, setBarGraphSalaryMonthWiseData] =
     useState<SalaryMonthWiseDataProps[]>([]);
+  const [yearQuarterToggle, setYearQuarterToggle] = useState("Year");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const apiToggle: { [key: string]: any } = {
+      Year: salaryAnalyticsYearDepartmentAPI,
+      "Half Yearly": salaryAnalyticsHalfYearDepartmentAPI,
+      Quarterly: salaryAnalyticsQuarterDepartmentAPI,
+    };
+
     //Fetch user detail
     const fetch = async () => {
-      const salaryAnalyticsMonthWise = await salaryAnalyticsDepartmentAPI(
-        "2023"
+      const salaryAnalyticsMonthWise = await apiToggle[yearQuarterToggle](
+        new Date().getFullYear().toString()
       );
-      const employeesStatusData = await getEmployeesStatusAPI();
-      setPieGraphEmployeesStatusData(employeesStatusData);
+      const employeesStatusData = await employeeDepartmentStatusYearAPI("2023");
+      setBarGraphEmployeesStatusData(employeesStatusData);
+      console.log(employeesStatusData);
       setBarGraphSalaryMonthWiseData(
         salaryAnalyticsMonthWise as SalaryMonthWiseDataProps[]
       );
       setIsLoading(false);
     };
     fetch();
-  }, []);
+  }, [yearQuarterToggle]);
 
   return isLoading ? (
     <LoadingSection message="Loading... Please wait" />
@@ -70,10 +85,18 @@ export default function Manager() {
               backgroundImage: "none",
             }}
           >
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography fontSize="1.0rem" mb={2}>
-                Department Analytics for year 2023
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Typography fontSize="1.0rem" mb={2} flex={1}>
+                Department Analytics: 2023
               </Typography>
+              <Dropdown
+                title="Range"
+                label="Range"
+                initValue={"Year"}
+                fullWidth={false}
+                options={DropdownOptions["yearQuarter"]}
+                onChange={(event) => setYearQuarterToggle(event.target.value)}
+              />
             </Box>
             <Box height={300}>
               <GraphBarWithLabel
@@ -86,14 +109,26 @@ export default function Manager() {
                   "Marketing",
                   "Sales",
                 ]}
-                xaxis="Month"
+                xaxis={
+                  yearQuarterToggle === "Year"
+                    ? "Month"
+                    : yearQuarterToggle === "Half Yearly"
+                    ? "Half Year"
+                    : "Quarter"
+                }
                 yaxis="Total Salary"
-                indexBy="month"
+                indexBy={
+                  yearQuarterToggle === "Year"
+                    ? "month"
+                    : yearQuarterToggle === "Half Yearly"
+                    ? "halfyear"
+                    : "quarter"
+                }
               />
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12}>
           <Paper
             sx={{
               height: 400,
@@ -104,18 +139,27 @@ export default function Manager() {
               boxShadow: "none",
             }}
           >
-            <Typography fontSize="1.2rem">
+            <Typography fontSize="1rem">
               Employees Status
               <Typography
                 component={"span"}
                 fontSize="0.8rem"
                 sx={{ color: ColorConstant.GRAY }}
               >
-                {" "}
-                (No of Employee)
+                {" (No of Employee)"}
               </Typography>
             </Typography>
-            <PieChart data={pieGraphEmployeesStatusData} />
+            <Box height={300}>
+              <GraphBarWithLabel
+                data={barGraphEmployeesStatusData}
+                keys={["Active", "Inactive", "Promoted"]}
+                xaxis="Department"
+                yaxis="Status"
+                indexBy="department"
+                mode="grouped"
+                tickValues={[]}
+              />
+            </Box>
           </Paper>
         </Grid>
       </Grid>

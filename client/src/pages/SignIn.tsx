@@ -20,7 +20,7 @@ import { UserInfoLogin } from "../utils/interface";
 import { firebaseAuth } from "../firebase/config";
 
 export default function SignIn() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {

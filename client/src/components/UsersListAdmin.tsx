@@ -93,7 +93,7 @@ export default function UsersListAdmin() {
               paginationModel: { page: 0, pageSize: 25 },
             },
           }}
-          pageSizeOptions={[25, 50]}
+          pageSizeOptions={[10, 25]}
         />
       )}
       <Typography color={"primary"} mt={4}>

@@ -1,4 +1,5 @@
 import { BarDatum, BarTooltipProps } from "@nivo/bar";
+import { MayHaveLabel, PieTooltipProps } from "@nivo/pie";
 
 export const StylesConstant: { [key: string]: any } = {
   divCenterStyle: {
@@ -119,7 +120,7 @@ export const ColorConstant = {
   TEAL_SIDEBAR_BG: "#0d4250",
   TEAL_SIDEBAR_HOVER_BG: "#0b2b34",
   // THEME - LIGHT
-  LIGHT_BG: "#f5f5f5",
+  LIGHT_BG: "#f4f4f4",
   LIGHT_SHADE_BG: "#dcdcdc",
   LIGHT_TEAL_BG: "#63b0ad",
   LIGHT_SIDEBAR_BG: "#a3dfe1",
@@ -186,8 +187,13 @@ export const DropdownOptions: { [key: string]: any } = {
     { value: 1, label: "Last Month" },
     { value: 3, label: "Last 3 Month" },
     { value: 6, label: "Last 6 Month" },
-    { value: 12, label: "For a Year" },
-  ]
+    { value: 12, label: "Financial Year" },
+  ],
+  yearQuarter: [
+    { value: "Year", label: "Year" },
+    { value: "Half Yearly", label: "Half Yearly" },
+    { value: "Quarterly", label: "Quarterly" },
+  ],
 };
 
 export const lineDataYear = [
@@ -247,6 +253,32 @@ export const labelTooltip = (prop: BarTooltipProps<BarDatum>) => {
       }}
     >
       {prop.label + " : " + prop.value}
+    </div>
+  );
+};
+
+export const labelTooltipPie = (props: PieTooltipProps<MayHaveLabel>) => {
+  return (
+    <div
+      style={{
+        background: "#202020",
+        padding: "5px 10px",
+        fontSize: "0.8rem",
+        color: "#fff",
+        borderRadius: "5px",
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          height: "12px",
+          width: "12px",
+          background: props.datum.color,
+          marginRight: "10px",
+        }}
+      ></div>
+      {props.datum.label + " : " + props.datum.value}
     </div>
   );
 };

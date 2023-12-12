@@ -12,70 +12,81 @@ import {
   useTheme,
 } from "@mui/material";
 import { NavLink as ReactRouterLink } from "react-router-dom";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { RoleLevel } from "../utils/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import GridViewIcon from "@mui/icons-material/GridView";
+import PeopleIcon from "@mui/icons-material/People";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import QuizIcon from "@mui/icons-material/Quiz";
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 export const sidebarAccessLevelUser = (role: RoleLevel) => {
   switch (role) {
     case "Employee":
       return [
         {
-          section: "Data",
+          section: "Application",
           routeList: [
-            { title: "Users", route: "/users" },
-            { title: "Salary Detail", route: "/salarydetail" },
+            { title: "View Users", route: "/users", icon: PeopleIcon },
+            {
+              title: "Salary Detail",
+              route: "/salarydetail",
+              icon: ReceiptLongIcon,
+            },
           ],
         },
         {
           section: "Pages",
-          routeList: [{ title: "FAQs", route: "/faqs" }],
+          routeList: [{ title: "FAQs", route: "/", icon: QuizIcon }],
         },
         {
           section: "Account",
-          routeList: [{ title: "Job Details", route: "/jobdetails" }],
+          routeList: [{ title: "Report", route: "/", icon: SummarizeIcon }],
         },
       ];
     case "Payroll Manager":
       return [
         {
-          section: "Data",
+          section: "Application",
           routeList: [
-            { title: "Users", route: "/users" },
-            { title: "Department", route: "/department" },
-            { title: "Teams", route: "/teams" },
+            { title: "Manage Users", route: "/users", icon: PeopleIcon },
           ],
         },
         {
           section: "Pages",
           routeList: [
-            { title: "Profile Add", route: "/addprofile" },
-            { title: "Calender", route: "/calender" },
-            { title: "FAQs", route: "/faqs" },
+            { title: "Calender", route: "/", icon: CalendarMonthIcon },
+            { title: "FAQs", route: "/", icon: QuizIcon },
           ],
         },
         {
           section: "Account",
-          routeList: [{ title: "Job Details", route: "/jobdetails" }],
+          routeList: [
+            { title: "Job Details", route: "/", icon: SummarizeIcon },
+          ],
         },
       ];
     case "Super Admin":
       return [
         {
-          section: "Data",
+          section: "Application",
           routeList: [
-            { title: "Users", route: "/users" },
-            { title: "Add User", route: "/adduser" },
+            { title: "Manage Users", route: "/users", icon: PeopleIcon },
+            { title: "Add User", route: "/adduser", icon: PersonAddIcon },
           ],
         },
         {
           section: "Pages",
-          routeList: [{ title: "FAQs", route: "/faqs" }],
+          routeList: [{ title: "FAQs", route: "/", icon: QuizIcon }],
         },
         {
           section: "Account",
-          routeList: [{ title: "Job Details", route: "/jobdetails" }],
+          routeList: [
+            { title: "System details", route: "/", icon: SummarizeIcon },
+          ],
         },
       ];
   }
@@ -123,7 +134,7 @@ export default function SideDrawer() {
                 to={"/" + text.toLowerCase()}
               >
                 <ListItemIcon sx={{ minWidth: "45px" }}>
-                  <InboxIcon />
+                  <GridViewIcon />
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItemButton>
@@ -154,7 +165,7 @@ export default function SideDrawer() {
                       to={text.route.toLowerCase()}
                     >
                       <ListItemIcon sx={{ minWidth: "45px" }}>
-                        <InboxIcon />
+                        <text.icon />
                       </ListItemIcon>
                       <ListItemText primary={text.title} />
                     </ListItemButton>

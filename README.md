@@ -3,6 +3,9 @@ This project aims to provide a typical payroll management.
 - Provides Login to different level of users : User, Admin and Super Admin.
 - Build with fine tech stack: ReactJs, TypeScript, Material-UI, SASS, Firebase, NodeJs and MongoDB.
 
+Demo User: Admin: goody@gmail.com / pass: goodydoe
+User: johndoe@gmail.com / pass: johndoe
+
 ## Getting Started with CRA
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
